@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEWO.ME — Advanced DDNet Integration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- AOS Library for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #ffffff;
+            --secondary: #111111;
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(5, 5, 5, 0.7);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        section {
+            padding: 140px 8% 80px 8%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero { text-align: center; align-items: center; }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 800;
+            letter-spacing: -4px;
+            margin-bottom: 20px;
+            line-height: 0.9;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        .version-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 40px;
+        }
+
+        .version-card {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            padding: 50px;
+            border-radius: 4px;
+            text-align: left;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .version-card:hover {
+            background: #0a0a0a;
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-10px);
+        }
+
+        .version-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .v-tag {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border: 1px solid var(--border);
+            margin-left: 10px;
+            vertical-align: middle;
+            color: var(--text-muted);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 30px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .feature-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .feature-list li::before {
+            content: "";
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+        }
+
+        .btn-black {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .btn-black:hover {
+            background: transparent;
+            color: var(--accent);
+            outline: 1px solid var(--accent);
+        }
+
+        .features-grid {
+            display: flex; 
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .f-item {
+            flex: 1; 
+            padding: 30px;
+            border-left: 1px solid var(--border);
+        }
+
+        .f-item h3 { font-size: 0.9rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .f-item p { color: var(--text-muted); font-size: 0.85rem; font-weight: 300; }
+
+        footer {
+            padding: 100px 8% 50px 8%;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .footer-col h4 { font-size: 0.8rem; text-transform: uppercase; margin-bottom: 20px; color: var(--text-main); }
+        .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; margin-bottom: 10px; transition: 0.3s; }
+        .footer-col a:hover { color: var(--accent); }
+
+        .lang-switch {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .features-grid { flex-wrap: wrap; }
+            .f-item { flex: 1 1 250px; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px 5%; }
+            .nav-links { display: none; }
+            h1 { font-size: 3.5rem; }
+            .version-grid { grid-template-columns: 1fr; }
+            .features-grid { flex-direction: column; }
+            .f-item { border-left: none; border-top: 1px solid var(--border); padding: 20px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">MEWO.ME</a>
+        <div class="nav-links">
+            <a href="#home" data-lang-en="Home" data-lang-ru="Главная">Home</a>
+            <a href="#versions" data-lang-en="Client" data-lang-ru="Клиент">Client</a>
+            <a onclick="scrollToFooter()" data-lang-en="More" data-lang-ru="Ещё">More</a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <h1 data-aos="fade-up" data-aos-duration="1000">MEWO CLIENT</h1>
+        <p class="hero-desc" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000"
+           data-lang-en="Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming."
+           data-lang-ru="Профессиональная интеграция для DDRaceNetwork. Превосходная производительность, обширный функционал и минималистичный подход к игре.">
+            Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming.
+        </p>
+        <div data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+            <a href="#versions" class="btn-black" style="padding: 20px 60px; display: inline-block;"
+               data-lang-en="Get Started" data-lang-ru="Начать">Get Started</a>
+        </div>
+    </section>
+
+    <section id="versions">
+        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px;" data-aos="fade-right"
+            data-lang-en="Select Edition" data-lang-ru="Выберите версию">Select Edition</h2>
+        <div class="version-grid">
+            
+            <div class="version-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="version-title">
+                    <span data-lang-en="Legit" data-lang-ru="Легит">Legit</span> <span class="v-tag" data-lang-en="Safe Edition" data-lang-ru="Безопасная версия">Safe Edition</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"
+                   data-lang-en="Designed for fair play and content creation. Enhanced visuals without compromising integrity."
+                   data-lang-ru="Создано для честной игры и создания контента. Улучшенная графика без ущерба для честности.">
+                    Designed for fair play and content creation. Enhanced visuals without compromising integrity.
+                </p>
+                <ul class="feature-list">
+                    <li data-lang-en="Advanced Skin Customization" data-lang-ru="Продвинутая кастомизация скинов">Advanced Skin Customization</li>
+                    <li data-lang-en="Performance Network Optimization" data-lang-ru="Оптимизация сетевой производительности">Performance Network Optimization</li>
+                    <li data-lang-en="Professional HUD Interface" data-lang-ru="Профессиональный интерфейс HUD">Professional HUD Interface</li>
+                    <li data-lang-en="DDRace Visual Enhancements" data-lang-ru="Визуальные улучшения DDRace">DDRace Visual Enhancements</li>
+                </ul>
+                <a href="#" class="btn-black" data-lang-en="Download Legit" data-lang-ru="Скачать Легит">Download Legit</a>
+            </div>
+
+            <div class="version-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="version-title">
+                    <span data-lang-en="Cheat" data-lang-ru="Чит">Cheat</span> <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"
+                   data-lang-en="Maximum control over game mechanics. Every tool required for technical dominance."
+                   data-lang-ru="Максимальный контроль над игровой механикой. Все инструменты для технического доминирования.">
+                    Maximum control over game mechanics. Every tool required for technical dominance.
+                </p>
+                <ul class="feature-list">
+                    <li data-lang-en="Dynamic Aim Assistance" data-lang-ru="Динамический аим-ассист">Dynamic Aim Assistance</li>
+                    <li data-lang-en="State-of-the-art Prediction" data-lang-ru="Передовая предикция">State-of-the-art Prediction</li>
+                    <li data-lang-en="Automated Refreeze Modules" data-lang-ru="Модули автоматического рефриза">Automated Refreeze Modules</li>
+                    <li data-lang-en="Movement Modifications" data-lang-ru="Модификации передвижения">Movement Modifications</li>
+                </ul>
+                <a href="#" class="btn-black" data-lang-en="Download Full" data-lang-ru="Скачать Фулл">Download Full</a>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="features">
+        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px;" data-aos="fade-right"
+            data-lang-en="Technical Excellence" data-lang-ru="Техническое совершенство">Technical Excellence</h2>
+        <div class="features-grid">
+            <div class="f-item" data-aos="fade-up">
+                <h3 data-lang-en="Low-Level Optimization" data-lang-ru="Низкоуровневая оптимизация">Low-Level Optimization</h3>
+                <p data-lang-en="Engineered in C++ for minimal latency and maximum frame stability." data-lang-ru="Разработано на C++ для минимальной задержки и максимальной стабильности кадров.">Engineered in C++ for minimal latency and maximum frame stability.</p>
+            </div>
+            <div class="f-item" data-aos="fade-up" data-aos-delay="100">
+                <h3 data-lang-en="Clean Architecture" data-lang-ru="Чистая архитектура">Clean Architecture</h3>
+                <p data-lang-en="Intuitive interface that integrates seamlessly with your gameplay." data-lang-ru="Интуитивный интерфейс, который бесшовно интегрируется в ваш игровой процесс.">Intuitive interface that integrates seamlessly with your gameplay.</p>
+            </div>
+            <div class="f-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 data-lang-en="Advanced Security" data-lang-ru="Продвинутая безопасность">Advanced Security</h3>
+                <p data-lang-en="Multi-layered encryption and unique build techniques for protection." data-lang-ru="Многоуровневое шифрование и уникальные методы сборки для защиты.">Multi-layered encryption and unique build techniques for protection.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="main-footer">
+        <div class="footer-top">
+            <div class="footer-col">
+                <h4 data-lang-en="Legal" data-lang-ru="Юридическая информация">Legal</h4>
+                <!-- GitHub Pages requires .html extensions for direct file access -->
+                <a href="tos.html" data-lang-en="Terms of Service" data-lang-ru="Условия использования">Terms of Service</a>
+                <a href="privacy.html" data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности">Privacy Policy</a>
+                <a href="dmca.html" data-lang-en="DMCA" data-lang-ru="DMCA">DMCA</a>
+                <div class="lang-switch">
+                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4 data-lang-en="Community" data-lang-ru="Сообщество">Community</h4>
+                <a href="https://discord.gg/y8B8TE2gx7" target="_blank" data-lang-en="Discord Server" data-lang-ru="Дискорд сервер">Discord Server</a>
+                <a href="#" data-lang-en="GitHub Repo" data-lang-ru="Репозиторий GitHub">GitHub Repo</a>
+                <a href="#" data-lang-en="Documentation" data-lang-ru="Документация">Documentation</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span data-lang-en="&copy; 2026 MEWO PROJECT. ALL RIGHTS RESERVED" data-lang-ru="&copy; 2026 ПРОЕКТ MEWO. ВСЕ ПРАВА ЗАЩИЩЕНЫ">&copy; 2026 MEWO PROJECT. ALL RIGHTS RESERVED</span>
+            <span data-lang-en="NOT AFFILIATED WITH DDRACENETWORK" data-lang-ru="НЕ СВЯЗАНО С DDRACENETWORK">NOT AFFILIATED WITH DDRACENETWORK</span>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 100
+        });
+
+        function scrollToFooter() {
+            document.getElementById('main-footer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const translation = el.getAttribute(`data-lang-${lang}`);
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+
+            // Update buttons state
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+            });
+        }
+    </script>
+</body>
+</html>
