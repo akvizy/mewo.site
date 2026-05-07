@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation — MEWO.ME</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --sidebar-bg: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.1);
+            --code-bg: #161616;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        aside {
+            width: 300px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            padding: 40px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo-docs {
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            color: var(--text);
+            display: block;
+            margin-bottom: 50px;
+        }
+
+        .nav-group {
+            margin-bottom: 30px;
+        }
+
+        .nav-group h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        .nav-group a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+
+        .nav-group a:hover {
+            color: var(--text-muted);
+        }
+
+        .nav-group a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Main Content Styling */
+        main {
+            margin-left: 300px;
+            padding: 80px 10%;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .docs-header {
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 50px 0 20px 0;
+            letter-spacing: -1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin: 30px 0 15px 0;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .badge {
+            background: var(--border);
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            border-radius: 3px;
+            text-transform: uppercase;
+            margin-right: 5px;
+        }
+
+        .lang-footer {
+            margin-top: 100px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 20px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        @media (max-width: 900px) {
+            aside { width: 220px; padding: 20px; }
+            main { margin-left: 220px; padding: 60px 5%; }
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            aside { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+            main { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <a href="index.html" class="logo-docs">MEWO.ME</a>
+        
+        <div class="nav-group">
+            <h4 data-lang-en="Introduction" data-lang-ru="Введение">Introduction</h4>
+            <a href="#getting-started" class="active" data-lang-en="Getting Started" data-lang-ru="С чего начать">Getting Started</a>
+            <a href="#requirements" data-lang-en="Requirements" data-lang-ru="Требования">Requirements</a>
+        </div>
+
+        <div class="nav-group">
+            <h4 data-lang-en="Configuration" data-lang-ru="Настройка">Configuration</h4>
+            <a href="#commands" data-lang-en="Console Commands" data-lang-ru="Консольные команды">Console Commands</a>
+            <a href="#keybinds" data-lang-en="Keybinds" data-lang-ru="Бинды клавиш">Keybinds</a>
+        </div>
+
+        <div class="nav-group">
+            <h4 data-lang-en="Versions" data-lang-ru="Версии">Versions</h4>
+            <a href="#legit-features" data-lang-en="Legit Edition" data-lang-ru="Legit версия">Legit Edition</a>
+            <a href="#cheat-features" data-lang-en="Cheat Edition" data-lang-ru="Cheat версия">Cheat Edition</a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="docs-header">
+            <h1 data-lang-en="Documentation" data-lang-ru="Документация">Documentation</h1>
+            <p data-lang-en="Everything you need to know about setting up and using MEWO Client effectively."
+               data-lang-ru="Все, что вам нужно знать о настройке и эффективном использовании клиента MEWO.">
+                Everything you need to know about setting up and using MEWO Client effectively.
+            </p>
+        </div>
+
+        <section id="getting-started">
+            <h2 data-lang-en="Getting Started" data-lang-ru="С чего начать">Getting Started</h2>
+            <p data-lang-en="After downloading your chosen edition, follow these steps to integrate MEWO into your DDNet environment."
+               data-lang-ru="После загрузки выбранной версии выполните следующие шаги для интеграции MEWO в вашу среду DDNet.">
+                After downloading your chosen edition, follow these steps to integrate MEWO into your DDNet environment.
+            </p>
+            <h3 data-lang-en="Installation" data-lang-ru="Установка">Installation</h3>
+            <p data-lang-en="1. Extract the downloaded archive to your DDNet folder." data-lang-ru="1. Распакуйте скачанный архив в папку с DDNet.">1. Extract the downloaded archive to your DDNet folder.</p>
+            <p data-lang-en="2. Launch the MEWO executable." data-lang-ru="2. Запустите исполняемый файл MEWO.">2. Launch the MEWO executable.</p>
+            <p data-lang-en="3. Enter your license key when prompted." data-lang-ru="3. Введите лицензионный ключ при появлении запроса.">3. Enter your license key when prompted.</p>
+        </section>
+
+        <section id="commands">
+            <h2 data-lang-en="Console Commands" data-lang-ru="Консольные команды">Console Commands</h2>
+            <p data-lang-en="The client provides a set of unique commands to control various modules directly from the console (F1)."
+               data-lang-ru="Клиент предоставляет набор уникальных команд для управления различными модулями прямо из консоли (F1).">
+                The client provides a set of unique commands to control various modules directly from the console (F1).
+            </p>
+            <div class="code-block">mewo_menu_toggle 1/0</div>
+            <p data-lang-en="Toggles the visual interface." data-lang-ru="Переключает визуальный интерфейс.">Toggles the visual interface.</p>
+            
+            <div class="code-block">mewo_esp_enabled 1/0</div>
+            <p data-lang-en="Enables or disables world entity visualization." data-lang-ru="Включает или выключает визуализацию игровых сущностей.">Enables or disables world entity visualization.</p>
+        </section>
+
+        <section id="keybinds">
+            <h2 data-lang-en="Keybinds" data-lang-ru="Бинды клавиш">Keybinds</h2>
+            <p data-lang-en="You can bind any module to a specific key using the standard engine syntax."
+               data-lang-ru="Вы можете привязать любой модуль к определенной клавише, используя стандартный синтаксис движка.">
+                You can bind any module to a specific key using the standard engine syntax.
+            </p>
+            <div class="code-block">bind k "mewo_aim_toggle"</div>
+            <p data-lang-en="Example: Pressing 'K' will toggle the aim assist functionality." 
+               data-lang-ru="Пример: Нажатие клавиши 'K' переключит функцию аим-ассиста.">
+                Example: Pressing 'K' will toggle the aim assist functionality.
+            </p>
+        </section>
+
+        <div class="lang-footer">
+            <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+            <button class="lang-btn" onclick="setLanguage('ru')">Русский</button>
+        </div>
+    </main>
+
+    <script>
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const translation = el.getAttribute(`data-lang-${lang}`);
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase().includes(lang === 'en' ? 'english' : 'русский')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

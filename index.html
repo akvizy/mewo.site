@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEWO.ME — Advanced DDNet Integration</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- AOS Library for animations -->
+    <!-- Библиотека AOS для анимаций -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
@@ -32,7 +32,7 @@
             overflow-x: hidden;
         }
 
-        /* Custom Scrollbar */
+        /* Кастомный скроллбар */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
@@ -105,7 +105,7 @@
             gap: 20px;
             width: 100%;
             max-width: 1100px;
-            margin-top: 40px;
+            margin: 40px auto 0 auto;
         }
 
         .version-card {
@@ -113,8 +113,11 @@
             border: 1px solid var(--border);
             padding: 50px;
             border-radius: 4px;
-            text-align: left;
+            text-align: center;
             transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .version-card:hover {
@@ -123,32 +126,41 @@
             transform: translateY(-10px);
         }
 
-        .version-title {
-            font-size: 1.5rem;
+        .version-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px; /* Уменьшен отступ заголовка */
+        }
+
+        .version-name {
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            margin-bottom: 2px; /* Уменьшен отступ между названием и тегом */
         }
 
         .v-tag {
             font-size: 0.65rem;
-            padding: 2px 8px;
+            padding: 2px 10px;
             border: 1px solid var(--border);
-            margin-left: 10px;
-            vertical-align: middle;
             color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .feature-list {
             list-style: none;
-            margin: 30px 0;
+            margin: 20px 0; /* Уменьшен отступ списка */
             color: var(--text-muted);
             font-size: 0.9rem;
+            text-align: left;
+            width: fit-content;
         }
 
         .feature-list li {
-            margin-bottom: 12px;
+            margin-bottom: 8px; /* Уменьшен отступ между пунктами списка */
             display: flex;
             align-items: center;
             gap: 15px;
@@ -159,6 +171,7 @@
             width: 4px;
             height: 4px;
             background: var(--accent);
+            flex-shrink: 0;
         }
 
         .btn-black {
@@ -173,6 +186,9 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.3s;
+            width: 100%;
+            max-width: 250px;
+            margin-top: 10px; /* Небольшой отступ сверху для кнопки */
         }
 
         .btn-black:hover {
@@ -288,13 +304,14 @@
     </section>
 
     <section id="versions">
-        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px;" data-aos="fade-right"
+        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px; text-align: center;" data-aos="fade-up"
             data-lang-en="Select Edition" data-lang-ru="Выберите версию">Select Edition</h2>
         <div class="version-grid">
             
             <div class="version-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="version-title">
-                    <span data-lang-en="Legit" data-lang-ru="Легит">Legit</span> <span class="v-tag" data-lang-en="Safe Edition" data-lang-ru="Безопасная версия">Safe Edition</span>
+                <div class="version-header">
+                    <span class="version-name" data-lang-en="Legit" data-lang-ru="Легит">Legit</span>
+                    <span class="v-tag" data-lang-en="Safe Edition" data-lang-ru="Безопасная версия">Safe Edition</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.9rem;"
                    data-lang-en="Designed for fair play and content creation. Enhanced visuals without compromising integrity."
@@ -311,8 +328,9 @@
             </div>
 
             <div class="version-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="version-title">
-                    <span data-lang-en="Cheat" data-lang-ru="Чит">Cheat</span> <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
+                <div class="version-header">
+                    <span class="version-name" data-lang-en="Cheat" data-lang-ru="Чит">Cheat</span>
+                    <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.9rem;"
                    data-lang-en="Maximum control over game mechanics. Every tool required for technical dominance."
@@ -354,7 +372,6 @@
         <div class="footer-top">
             <div class="footer-col">
                 <h4 data-lang-en="Legal" data-lang-ru="Юридическая информация">Legal</h4>
-                <!-- GitHub Pages requires .html extensions for direct file access -->
                 <a href="tos.html" data-lang-en="Terms of Service" data-lang-ru="Условия использования">Terms of Service</a>
                 <a href="privacy.html" data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности">Privacy Policy</a>
                 <a href="dmca.html" data-lang-en="DMCA" data-lang-ru="DMCA">DMCA</a>
