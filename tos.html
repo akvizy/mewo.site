@@ -12,6 +12,7 @@
             --text: #ffffff;
             --text-muted: #888888;
             --border: rgba(255, 255, 255, 0.1);
+            --accent: #ffffff;
         }
 
         body {
@@ -45,39 +46,103 @@
         li { margin-bottom: 10px; font-weight: 300; }
 
         hr { border: 0; border-top: 1px solid var(--border); margin: 60px 0; }
+
+        /* Стили для переключателя языков */
+        .lang-switch {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
-    <a href="/" class="back-link">← Back to Home</a>
-    <h1>Terms of Service</h1>
-    <div class="last-updated">Last Updated: May 2026</div>
+    <a href="index.html" class="back-link" data-lang-en="← Back to Home" data-lang-ru="← На главную">← Back to Home</a>
+    <h1 data-lang-en="Terms of Service" data-lang-ru="Условия использования">Terms of Service</h1>
+    <div class="last-updated" data-lang-en="Last Updated: May 2026" data-lang-ru="Последнее обновление: Май 2026">Last Updated: May 2026</div>
 
     <section>
-        <h3>1. Acceptance of Terms</h3>
-        <p>By using the MEWO.ME website or purchasing the supplied software, you automatically accept these terms of service in full. If you do not agree with any paragraph below, you must cease use of our services immediately.</p>
+        <h3 data-lang-en="1. Acceptance of Terms" data-lang-ru="1. Принятие условий">1. Acceptance of Terms</h3>
+        <p data-lang-en="By using the MEWO.ME website or purchasing the supplied software, you automatically accept these terms of service in full. If you do not agree with any paragraph below, you must cease use of our services immediately."
+           data-lang-ru="Используя веб-сайт MEWO.ME или приобретая поставляемое программное обеспечение, вы автоматически полностью принимаете настоящие условия обслуживания. Если вы не согласны с любым пунктом ниже, вы должны немедленно прекратить использование наших услуг.">
+            By using the MEWO.ME website or purchasing the supplied software, you automatically accept these terms of service in full. If you do not agree with any paragraph below, you must cease use of our services immediately.
+        </p>
 
-        <h3>2. License Usage & Restrictions</h3>
-        <p>After purchase, any kind of account distribution, sharing, or resale is strictly prohibited. The following actions related to the supplied software are also forbidden:</p>
+        <h3 data-lang-en="2. License Usage & Restrictions" data-lang-ru="2. Использование лицензии и ограничения">2. License Usage & Restrictions</h3>
+        <p data-lang-en="After purchase, any kind of account distribution, sharing, or resale is strictly prohibited. The following actions related to the supplied software are also forbidden:"
+           data-lang-ru="После покупки любое распространение учетных записей, совместное использование или перепродажа строго запрещены. Также запрещены следующие действия, связанные с поставляемым программным обеспечением:">
+            After purchase, any kind of account distribution, sharing, or resale is strictly prohibited. The following actions related to the supplied software are also forbidden:
+        </p>
         <ul>
-            <li>Reverse engineering (including dumps, cracks, and deobfuscation).</li>
-            <li>Modification of client files or unauthorized distribution.</li>
-            <li>Attempting to bypass Hardware ID (HWID) security systems.</li>
+            <li data-lang-en="Reverse engineering (including dumps, cracks, and deobfuscation)." data-lang-ru="Обратная разработка (включая дампы, кряки и деобфускацию).">Reverse engineering (including dumps, cracks, and deobfuscation).</li>
+            <li data-lang-en="Modification of client files or unauthorized distribution." data-lang-ru="Модификация файлов клиента или несанкционированное распространение.">Modification of client files or unauthorized distribution.</li>
+            <li data-lang-en="Attempting to bypass Hardware ID (HWID) security systems." data-lang-ru="Попытка обхода систем безопасности Hardware ID (HWID).">Attempting to bypass Hardware ID (HWID) security systems.</li>
         </ul>
 
-        <h3>3. Hardware ID (HWID) Binding</h3>
-        <p>Your license is permanently linked to your hardware. We do not change account details (linked email or hardware profile) under any circumstances to prevent unauthorized transfers and fraud.</p>
+        <h3 data-lang-en="3. Hardware ID (HWID) Binding" data-lang-ru="3. Привязка к Hardware ID (HWID)">3. Hardware ID (HWID) Binding</h3>
+        <p data-lang-en="Your license is permanently linked to your hardware. We do not change account details (linked email or hardware profile) under any circumstances to prevent unauthorized transfers and fraud."
+           data-lang-ru="Ваша лицензия навсегда привязана к вашему оборудованию. Мы ни при каких обстоятельствах не меняем данные учетной записи (привязанную электронную почту или профиль оборудования) во избежание несанкционированной передачи и мошенничества.">
+            Your license is permanently linked to your hardware. We do not change account details (linked email or hardware profile) under any circumstances to prevent unauthorized transfers and fraud.
+        </p>
 
-        <h3>4. No Refund Policy</h3>
-        <p>Due to the nature of digital products, all sales are final. A refund will NOT be provided except in the case of a verified technical issue caused solely by the developer's fault that prevents the software from functioning, which cannot be fixed after a formal report.</p>
+        <h3 data-lang-en="4. No Refund Policy" data-lang-ru="4. Политика отсутствия возврата средств">4. No Refund Policy</h3>
+        <p data-lang-en="Due to the nature of digital products, all sales are final. A refund will NOT be provided except in the case of a verified technical issue caused solely by the developer's fault that prevents the software from functioning, which cannot be fixed after a formal report."
+           data-lang-ru="В связи с природой цифровых товаров, все продажи являются окончательными. Возврат средств НЕ будет предоставлен, за исключением случая подтвержденной технической проблемы, вызванной исключительно виной разработчика, которая препятствует функционированию программного обеспечения и не может быть исправлена после официального отчета.">
+            Due to the nature of digital products, all sales are final. A refund will NOT be provided except in the case of a verified technical issue caused solely by the developer's fault that prevents the software from functioning, which cannot be fixed after a formal report.
+        </p>
 
-        <h3>5. Disclaimer & Liability</h3>
-        <p>The developers and administrators of MEWO are not responsible for the user's actions in online mode. You acknowledge that usage of third-party modifications may result in account suspension or bans from game servers. Usage of the "Cheat" edition is entirely at your own risk.</p>
+        <h3 data-lang-en="5. Disclaimer & Liability" data-lang-ru="5. Отказ от ответственности и обязательства">5. Disclaimer & Liability</h3>
+        <p data-lang-en="The developers and administrators of MEWO are not responsible for the user's actions in online mode. You acknowledge that usage of third-party modifications may result in account suspension or bans from game servers. Usage of the 'Cheat' edition is entirely at your own risk."
+           data-lang-ru="Разработчики и администраторы MEWO не несут ответственности за действия пользователя в онлайн-режиме. Вы признаете, что использование сторонних модификаций может привести к приостановке учетной записи или банам на игровых серверах. Использование 'Cheat' версии осуществляется исключительно на ваш страх и риск.">
+            The developers and administrators of MEWO are not responsible for the user's actions in online mode. You acknowledge that usage of third-party modifications may result in account suspension or bans from game servers. Usage of the "Cheat" edition is entirely at your own risk.
+        </p>
 
-        <h3>6. Termination</h3>
-        <p>Violation of any paragraph of these terms will result in immediate revocation of your subscription with no possibility of a refund.</p>
+        <h3 data-lang-en="6. Termination" data-lang-ru="6. Прекращение действия">6. Termination</h3>
+        <p data-lang-en="Violation of any paragraph of these terms will result in immediate revocation of your subscription with no possibility of a refund."
+           data-lang-ru="Нарушение любого пункта этих условий приведет к немедленному аннулированию вашей подписки без возможности возврата средств.">
+            Violation of any paragraph of these terms will result in immediate revocation of your subscription with no possibility of a refund.
+        </p>
     </section>
+
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+    </div>
 
     <hr>
     <p style="font-size: 0.8rem;">&copy; 2026 MEWO PROJECT</p>
+
+    <script>
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const translation = el.getAttribute(`data-lang-${lang}`);
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+
+            // Обновление состояния кнопок
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+            });
+        }
+    </script>
 </body>
 </html>

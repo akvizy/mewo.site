@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMCA Policy — MEWO.SITE</title>
+    <title>DMCA Policy — MEWO.ME</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
@@ -12,6 +12,7 @@
             --text: #ffffff;
             --text-muted: #888888;
             --border: rgba(255, 255, 255, 0.1);
+            --accent: #ffffff;
         }
 
         body {
@@ -40,32 +41,94 @@
 
         h3 { font-size: 1.2rem; margin: 40px 0 20px 0; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
         p { color: var(--text-muted); margin-bottom: 20px; font-weight: 300; }
+        
+        ul { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        li { margin-bottom: 10px; font-weight: 300; }
 
         hr { border: 0; border-top: 1px solid var(--border); margin: 60px 0; }
+
+        .lang-switch {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← Back to Home</a>
-    <h1>DMCA Policy</h1>
-    <div class="last-updated">Last Updated: May 2026</div>
+    <a href="index.html" class="back-link" data-lang-en="← Back to Home" data-lang-ru="← На главную">← Back to Home</a>
+    <h1 data-lang-en="DMCA Policy" data-lang-ru="Политика DMCA">DMCA Policy</h1>
+    <div class="last-updated" data-lang-en="Last Updated: May 2026" data-lang-ru="Последнее обновление: Май 2026">Last Updated: May 2026</div>
 
     <section>
-        <p>MEWO PROJECT respects the intellectual property rights of others. In accordance with the Digital Millennium Copyright Act (DMCA), we will respond quickly to claims of copyright infringement.</p>
+        <p data-lang-en="MEWO PROJECT respects the intellectual property rights of others. In accordance with the Digital Millennium Copyright Act (DMCA), we will respond quickly to claims of copyright infringement."
+           data-lang-ru="ПРОЕКТ MEWO уважает права на интеллектуальную собственность других лиц. В соответствии с Законом об авторском праве в цифровую эпоху (DMCA), мы будем оперативно реагировать на заявления о нарушении авторских прав.">
+            MEWO PROJECT respects the intellectual property rights of others. In accordance with the Digital Millennium Copyright Act (DMCA), we will respond quickly to claims of copyright infringement.
+        </p>
 
-        <h3>1. Reporting Infringement</h3>
-        <p>If you believe that your work has been copied in a way that constitutes copyright infringement, please provide our agent with the following information:</p>
+        <h3 data-lang-en="1. Reporting Infringement" data-lang-ru="1. Сообщение о нарушении">1. Reporting Infringement</h3>
+        <p data-lang-en="If you believe that your work has been copied in a way that constitutes copyright infringement, please provide our agent with the following information:"
+           data-lang-ru="Если вы считаете, что ваша работа была скопирована способом, представляющим собой нарушение авторских прав, пожалуйста, предоставьте нашему агенту следующую информацию:">
+            If you believe that your work has been copied in a way that constitutes copyright infringement, please provide our agent with the following information:
+        </p>
         <ul>
-            <li>A physical or electronic signature of the copyright owner.</li>
-            <li>Identification of the copyrighted work claimed to have been infringed.</li>
-            <li>Contact information (email is preferred).</li>
-            <li>A statement that the information in the notification is accurate.</li>
+            <li data-lang-en="A physical or electronic signature of the copyright owner." data-lang-ru="Физическая или электронная подпись владельца авторских прав.">A physical or electronic signature of the copyright owner.</li>
+            <li data-lang-en="Identification of the copyrighted work claimed to have been infringed." data-lang-ru="Идентификация произведения, авторские права на которое, по вашему мнению, были нарушены.">Identification of the copyrighted work claimed to have been infringed.</li>
+            <li data-lang-en="Detailed contact information (email is preferred)." data-lang-ru="Подробная контактная информация (предпочтительно электронная почта).">Detailed contact information (email is preferred).</li>
+            <li data-lang-en="A statement that the information in the notification is accurate." data-lang-ru="Заявление о том, что информация в уведомлении является точной.">A statement that the information in the notification is accurate.</li>
         </ul>
 
-        <h3>2. Contact Information</h3>
-        <p>All DMCA notices should be sent to our official support channels or via our Discord server through the administration ticket system.</p>
+        <h3 data-lang-en="2. Contact Information" data-lang-ru="2. Контактная информация">2. Contact Information</h3>
+        <p data-lang-en="All DMCA notices should be sent to our official support channels or via our Discord server through the administration ticket system. We take these matters seriously and will investigate within 72 hours."
+           data-lang-ru="Все уведомления DMCA должны направляться через наши официальные каналы поддержки или через наш сервер Discord с помощью системы тикетов. Мы серьезно относимся к таким вопросам и проведем расследование в течение 72 часов.">
+            All DMCA notices should be sent to our official support channels or via our Discord server through the administration ticket system. We take these matters seriously and will investigate within 72 hours.
+        </p>
+
+        <h3 data-lang-en="3. Repeat Infringers" data-lang-ru="3. Повторные нарушения">3. Repeat Infringers</h3>
+        <p data-lang-en="It is our policy to terminate the access of users who are found to be repeat infringers of intellectual property rights."
+           data-lang-ru="Наша политика заключается в прекращении доступа пользователей, которые будут признаны неоднократными нарушителями прав интеллектуальной собственности.">
+            It is our policy to terminate the access of users who are found to be repeat infringers of intellectual property rights.
+        </p>
     </section>
+
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+    </div>
 
     <hr>
     <p style="font-size: 0.8rem;">&copy; 2026 MEWO PROJECT</p>
+
+    <script>
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const translation = el.getAttribute(`data-lang-${lang}`);
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+            });
+        }
+    </script>
 </body>
 </html>

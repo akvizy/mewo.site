@@ -12,6 +12,7 @@
             --text: #ffffff;
             --text-muted: #888888;
             --border: rgba(255, 255, 255, 0.1);
+            --accent: #ffffff;
         }
 
         body {
@@ -45,39 +46,101 @@
         li { margin-bottom: 10px; font-weight: 300; }
 
         hr { border: 0; border-top: 1px solid var(--border); margin: 60px 0; }
+
+        .lang-switch {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
-    <a href="/" class="back-link">← Back to Home</a>
-    <h1>Privacy Policy</h1>
-    <div class="last-updated">Last Updated: May 2026</div>
+    <a href="index.html" class="back-link" data-lang-en="← Back to Home" data-lang-ru="← На главную">← Back to Home</a>
+    <h1 data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности">Privacy Policy</h1>
+    <div class="last-updated" data-lang-en="Last Updated: May 2026" data-lang-ru="Последнее обновление: Май 2026">Last Updated: May 2026</div>
 
     <section>
-        <h3>1. Website Data</h3>
-        <p>When purchasing access or using our website, we may collect your unique payment ID and basic connection logs. We do not store your passwords in plain text.</p>
+        <h3 data-lang-en="1. Website Data" data-lang-ru="1. Данные веб-сайта">1. Website Data</h3>
+        <p data-lang-en="When purchasing access or using our website, we may collect your unique payment ID and basic connection logs. We do not store your passwords in plain text."
+           data-lang-ru="При покупке доступа или использовании нашего веб-сайта мы можем собирать ваш уникальный идентификатор платежа и основные журналы подключений. Мы не храним ваши пароли в открытом виде.">
+            When purchasing access or using our website, we may collect your unique payment ID and basic connection logs. We do not store your passwords in plain text.
+        </p>
 
-        <h3>2. Software Data Processing</h3>
-        <p>When running MEWO Client, the following technical information is processed to generate your unique Hardware ID (HWID):</p>
+        <h3 data-lang-en="2. Software Data Processing" data-lang-ru="2. Обработка программных данных">2. Software Data Processing</h3>
+        <p data-lang-en="When running MEWO Client, the following technical information is processed to generate your unique Hardware ID (HWID):"
+           data-lang-ru="При запуске клиента MEWO обрабатывается следующая техническая информация для создания вашего уникального Hardware ID (HWID):">
+            When running MEWO Client, the following technical information is processed to generate your unique Hardware ID (HWID):
+        </p>
         <ul>
-            <li>Processor (CPU) information</li>
-            <li>Graphics Card (GPU) identifiers</li>
-            <li>RAM configuration and size</li>
-            <li>OS Disk serial number</li>
-            <li>IP Address and authentication token</li>
+            <li data-lang-en="Processor (CPU) information" data-lang-ru="Информация о процессоре (CPU)">Processor (CPU) information</li>
+            <li data-lang-en="Graphics Card (GPU) identifiers" data-lang-ru="Идентификаторы видеокарты (GPU)">Graphics Card (GPU) identifiers</li>
+            <li data-lang-en="RAM configuration and size" data-lang-ru="Конфигурация и размер оперативной памяти">RAM configuration and size</li>
+            <li data-lang-en="OS Disk serial number" data-lang-ru="Серийный номер системного диска">OS Disk serial number</li>
+            <li data-lang-en="IP Address and authentication token" data-lang-ru="IP-адрес и токен аутентификации">IP Address and authentication token</li>
         </ul>
-        <p>This information is hashed and used solely for the purpose of license authentication and protection against unauthorized usage.</p>
+        <p data-lang-en="This information is hashed and used solely for the purpose of license authentication and protection against unauthorized usage."
+           data-lang-ru="Эта информация хэшируется и используется исключительно в целях аутентификации лицензии и защиты от несанкционированного использования.">
+            This information is hashed and used solely for the purpose of license authentication and protection against unauthorized usage.
+        </p>
 
-        <h3>3. Data Deletion</h3>
-        <p>If you wish to delete your technical information from our servers, you may do so by contacting our support team via official channels.</p>
+        <h3 data-lang-en="3. Data Deletion" data-lang-ru="3. Удаление данных">3. Data Deletion</h3>
+        <p data-lang-en="If you wish to delete your technical information from our servers, you may do so by contacting our support team via official channels."
+           data-lang-ru="Если вы хотите удалить свою техническую информацию с наших серверов, вы можете сделать это, связавшись с нашей службой поддержки через официальные каналы.">
+            If you wish to delete your technical information from our servers, you may do so by contacting our support team via official channels.
+        </p>
 
-        <h3>4. Third-Party Services</h3>
-        <p>Our payment providers may collect your name, email, and transaction details. Please refer to their respective privacy policies for more information on how they handle your financial data.</p>
+        <h3 data-lang-en="4. Third-Party Services" data-lang-ru="4. Сторонние сервисы">4. Third-Party Services</h3>
+        <p data-lang-en="Our payment providers may collect your name, email, and transaction details. Please refer to their respective privacy policies for more information on how they handle your financial data."
+           data-lang-ru="Наши платежные провайдеры могут собирать ваше имя, адрес электронной почты и детали транзакции. Пожалуйста, ознакомьтесь с их соответствующими политиками конфиденциальности для получения дополнительной информации о том, как они обрабатывают ваши финансовые данные.">
+            Our payment providers may collect your name, email, and transaction details. Please refer to their respective privacy policies for more information on how they handle your financial data.
+        </p>
 
-        <h3>5. Consent</h3>
-        <p>By using our software and website, you hereby consent to the processing of data as described in this policy.</p>
+        <h3 data-lang-en="5. Consent" data-lang-ru="5. Согласие">5. Consent</h3>
+        <p data-lang-en="By using our software and website, you hereby consent to the processing of data as described in this policy."
+           data-lang-ru="Используя наше программное обеспечение и веб-сайт, вы тем самым соглашаетесь на обработку данных, как описано в этой политике.">
+            By using our software and website, you hereby consent to the processing of data as described in this policy.
+        </p>
     </section>
+
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+    </div>
 
     <hr>
     <p style="font-size: 0.8rem;">&copy; 2026 MEWO PROJECT</p>
+
+    <script>
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const translation = el.getAttribute(`data-lang-${lang}`);
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+            });
+        }
+    </script>
 </body>
 </html>
