@@ -181,13 +181,13 @@
     </nav>
 
     <section id="home" class="hero">
-        <h1 data-aos="fade-up">MEWO CLIENT</h1>
-        <p class="hero-desc" data-aos="fade-up" data-aos-delay="200"
+        <h1 data-aos="fade-up" data-aos-anchor-placement="top-bottom">MEWO CLIENT</h1>
+        <p class="hero-desc" data-aos="fade-up" data-aos-delay="100" data-aos-anchor-placement="top-bottom"
            data-lang-en="Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming."
            data-lang-ru="Профессиональная интеграция для DDRaceNetwork. Превосходная производительность, обширный функционал и минималистичный подход к игре.">
             Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming.
         </p>
-        <div data-aos="fade-up" data-aos-delay="400">
+        <div data-aos="fade-up" data-aos-delay="200" data-aos-anchor-placement="top-bottom">
             <button onclick="scrollToSection('versions')" class="btn-black" data-lang-en="Get Started" data-lang-ru="Начать">Get Started</button>
         </div>
     </section>
@@ -215,7 +215,7 @@
                 <a href="lite" class="btn-black" data-lang-en="Purchase Lite" data-lang-ru="Приобрести Lite">Purchase Lite</a>
             </div>
 
-            <div class="version-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="version-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="version-header">
                     <span class="version-name">Full</span>
                     <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
@@ -314,9 +314,9 @@
             } else {
                 isMagnetEnabled = magnetBtn.classList.contains('active');
             }
-
+            
             if (window.AOS) {
-                AOS.refresh();
+                AOS.refreshHard();
             }
 
             init(fullHeight);
@@ -436,17 +436,26 @@
         });
 
         window.addEventListener('load', () => {
+            const isMobile = window.innerWidth <= 768;
             AOS.init({ 
                 duration: 800, 
                 once: true,
-                startEvent: 'DOMContentLoaded'
+                offset: isMobile ? 50 : 120,
+                delay: 0,
+                easing: 'ease-out-quad',
+                startEvent: 'DOMContentLoaded',
+                disableMutationObserver: false
             });
             resize();
             animate();
+            
+            setTimeout(() => {
+                if (window.AOS) AOS.refreshHard();
+            }, 500);
         });
 
         const resizeObserver = new ResizeObserver(() => {
-            if (window.AOS) AOS.refresh();
+            if (window.AOS) AOS.refreshHard();
         });
         resizeObserver.observe(document.body);
     </script>
