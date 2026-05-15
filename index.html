@@ -94,7 +94,6 @@
 
         .nav-links a:hover { color: var(--accent); }
 
-        /* Стиль кнопки переключателя */
         .toggle-interaction {
             background: transparent;
             border: 1px solid var(--border);
@@ -274,22 +273,6 @@
             box-sizing: border-box;
         }
 
-        .features-grid {
-            display: flex; 
-            justify-content: space-between;
-            gap: 20px;
-            width: 100%;
-        }
-
-        .f-item {
-            flex: 1; 
-            padding: 30px;
-            border-left: 1px solid var(--border);
-        }
-
-        .f-item h3 { font-size: 0.9rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .f-item p { color: var(--text-muted); font-size: 0.85rem; font-weight: 300; }
-
         footer {
             padding: 100px 8% 50px 8%;
             border-top: 1px solid var(--border);
@@ -344,19 +327,11 @@
             letter-spacing: 1px;
         }
 
-        @media (max-width: 1024px) {
-            .features-grid { flex-wrap: wrap; }
-            .f-item { flex: 1 1 250px; }
-            .nav-right { gap: 20px; }
-        }
-
         @media (max-width: 768px) {
             nav { padding: 20px 5%; }
             .nav-links { display: none; }
             h1 { font-size: 3.5rem; }
             .version-grid { grid-template-columns: 1fr; }
-            .features-grid { flex-direction: column; }
-            .f-item { border-left: none; border-top: 1px solid var(--border); padding: 20px 0; }
         }
     </style>
 </head>
@@ -372,7 +347,6 @@
                 <a href="#versions" data-lang-en="Edition" data-lang-ru="Издание">Edition</a>
                 <a onclick="scrollToFooter()" data-lang-en="More" data-lang-ru="Ещё">More</a>
             </div>
-            <!-- Кнопка отключения магнетизма -->
             <button id="toggle-magnet" class="toggle-interaction active" title="Включить/Выключить притяжение">
                 <span class="status-dot"></span>
                 <span class="btn-text" data-lang-en="Interactive" data-lang-ru="Интерактив">Interactive</span>
@@ -437,6 +411,13 @@
         </div>
     </section>
 
+    <section id="download" style="min-height: auto; padding: 0 8% 140px 8%;">
+        <div class="install-container" data-aos="fade-up">
+            <a href="temp" class="btn-black btn-install"
+                data-lang-en="DOWNLOAD MEWO LAUNCHER" data-lang-ru="СКАЧАТЬ MEWO LAUNCHER">DOWNLOAD MEWO LAUNCHER</a>
+        </div>
+    </section>
+
     <footer id="main-footer">
         <div class="footer-top">
             <div class="footer-col">
@@ -470,9 +451,8 @@
         
         let particles = [];
         let isInitialized = false;
-        let isMagnetEnabled = true; // Глобальный флаг притяжения
+        let isMagnetEnabled = true;
 
-        // Состояние взаимодействия
         const mouse = {
             x: null,
             y: null,
@@ -481,7 +461,6 @@
             isDesktop: !('ontouchstart' in window)
         };
 
-        // Обработка кнопки переключателя
         magnetBtn.addEventListener('click', () => {
             isMagnetEnabled = !isMagnetEnabled;
             if (isMagnetEnabled) {
@@ -491,13 +470,11 @@
             }
         });
 
-        // Мышь (ПК)
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.pageX;
             mouse.y = e.pageY;
         });
 
-        // Касания (Телефон)
         window.addEventListener('touchstart', (e) => {
             mouse.isTouched = true;
             if (e.touches.length > 0) {
@@ -555,7 +532,6 @@
             }
 
             update() {
-                // ПРОВЕРКА ФЛАГА: Если магнетизм выключен, взаимодействий нет
                 const canInteract = isMagnetEnabled && ((mouse.isDesktop && mouse.x !== null) || (!mouse.isDesktop && mouse.isTouched));
 
                 if (canInteract && mouse.x !== null && mouse.y !== null) {
@@ -571,7 +547,6 @@
                         this.vy += (dy / distance) * force * attraction;
                     }
                 } else {
-                    // Инерция
                     this.vx += (this.baseVx - this.vx) * 0.03;
                     this.vy += (this.baseVy - this.vy) * 0.03;
                 }
@@ -633,7 +608,6 @@
                     continue; 
                 }
 
-                // Визуальная связь с курсором (только если включено)
                 const isInteracting = isMagnetEnabled && ((mouse.isDesktop && mouse.x !== null) || (!mouse.isDesktop && mouse.isTouched));
                 if (isInteracting && mouse.x !== null && mouse.y !== null) {
                     let dx = p1.x - mouse.x;
