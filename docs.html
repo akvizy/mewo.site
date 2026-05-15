@@ -180,78 +180,7 @@
 
     <aside>
         <a href="https://mewo.site/" class="logo-docs">MEWO</a>
-        
-        <div class="nav-group">
-            <h4 data-lang-en="Introduction" data-lang-ru="Введение">Introduction</h4>
-            <a href="#getting-started" class="active" data-lang-en="Getting Started" data-lang-ru="С чего начать">Getting Started</a>
-            <a href="#requirements" data-lang-en="Requirements" data-lang-ru="Требования">Requirements</a>
-        </div>
-
-        <div class="nav-group">
-            <h4 data-lang-en="Configuration" data-lang-ru="Настройка">Configuration</h4>
-            <a href="#commands" data-lang-en="Console Commands" data-lang-ru="Консольные команды">Console Commands</a>
-            <a href="#keybinds" data-lang-en="Keybinds" data-lang-ru="Бинды клавиш">Keybinds</a>
-        </div>
-
-        <div class="nav-group">
-            <h4 data-lang-en="Versions" data-lang-ru="Версии">Versions</h4>
-            <a href="#legit-features" data-lang-en="Legit Edition" data-lang-ru="Legit версия">Legit Edition</a>
-            <a href="#cheat-features" data-lang-en="Cheat Edition" data-lang-ru="Cheat версия">Cheat Edition</a>
-        </div>
     </aside>
-
-    <main>
-        <div class="docs-header">
-            <h1 data-lang-en="Documentation" data-lang-ru="Документация">Documentation</h1>
-            <p data-lang-en="Everything you need to know about setting up and using MEWO Client effectively."
-               data-lang-ru="Все, что вам нужно знать о настройке и эффективном использовании клиента MEWO.">
-                Everything you need to know about setting up and using MEWO Client effectively.
-            </p>
-        </div>
-
-        <section id="getting-started">
-            <h2 data-lang-en="Getting Started" data-lang-ru="С чего начать">Getting Started</h2>
-            <p data-lang-en="After downloading your chosen edition, follow these steps to integrate MEWO into your DDNet environment."
-               data-lang-ru="После загрузки выбранной версии выполните следующие шаги для интеграции MEWO в вашу среду DDNet.">
-                After downloading your chosen edition, follow these steps to integrate MEWO into your DDNet environment.
-            </p>
-            <h3 data-lang-en="Installation" data-lang-ru="Установка">Installation</h3>
-            <p data-lang-en="1. Extract the downloaded archive to your DDNet folder." data-lang-ru="1. Распакуйте скачанный архив в папку с DDNet.">1. Extract the downloaded archive to your DDNet folder.</p>
-            <p data-lang-en="2. Launch the MEWO executable." data-lang-ru="2. Запустите исполняемый файл MEWO.">2. Launch the MEWO executable.</p>
-            <p data-lang-en="3. Enter your license key when prompted." data-lang-ru="3. Введите лицензионный ключ при появлении запроса.">3. Enter your license key when prompted.</p>
-        </section>
-
-        <section id="commands">
-            <h2 data-lang-en="Console Commands" data-lang-ru="Консольные команды">Console Commands</h2>
-            <p data-lang-en="The client provides a set of unique commands to control various modules directly from the console (F1)."
-               data-lang-ru="Клиент предоставляет набор уникальных команд для управления различными модулями прямо из консоли (F1).">
-                The client provides a set of unique commands to control various modules directly from the console (F1).
-            </p>
-            <div class="code-block">mewo_menu_toggle 1/0</div>
-            <p data-lang-en="Toggles the visual interface." data-lang-ru="Переключает визуальный интерфейс.">Toggles the visual interface.</p>
-            
-            <div class="code-block">mewo_esp_enabled 1/0</div>
-            <p data-lang-en="Enables or disables world entity visualization." data-lang-ru="Включает или выключает визуализацию игровых сущностей.">Enables or disables world entity visualization.</p>
-        </section>
-
-        <section id="keybinds">
-            <h2 data-lang-en="Keybinds" data-lang-ru="Бинды клавиш">Keybinds</h2>
-            <p data-lang-en="You can bind any module to a specific key using the standard engine syntax."
-               data-lang-ru="Вы можете привязать любой модуль к определенной клавише, используя стандартный синтаксис движка.">
-                You can bind any module to a specific key using the standard engine syntax.
-            </p>
-            <div class="code-block">bind k "mewo_aim_toggle"</div>
-            <p data-lang-en="Example: Pressing 'K' will toggle the aim assist functionality." 
-               data-lang-ru="Пример: Нажатие клавиши 'K' переключит функцию аим-ассиста.">
-                Example: Pressing 'K' will toggle the aim assist functionality.
-            </p>
-        </section>
-
-        <div class="lang-footer">
-            <button class="lang-btn active" onclick="setLanguage('en')">English</button>
-            <button class="lang-btn" onclick="setLanguage('ru')">Русский</button>
-        </div>
-    </main>
 
     <script>
         function setLanguage(lang) {
@@ -265,7 +194,7 @@
 
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if(btn.textContent.toLowerCase().includes(lang === 'en' ? 'english' : 'русский')) {
+                if(btn.textContent.toLowerCase().includes(lang === 'en' ? 'eng' : 'rus')) {
                     btn.classList.add('active');
                 }
             });
