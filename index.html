@@ -41,7 +41,7 @@
             pointer-events: none;
             opacity: 0.5;
             display: block;
-            overflow: hidden; /* Защита от вылета за границы */
+            overflow: hidden;
         }
 
         nav {
@@ -265,7 +265,6 @@
 
         function resize() {
             const dpr = window.devicePixelRatio || 1;
-            // Убираем scrollHeight, используем высоту body, чтобы избежать эффекта "открытого мира"
             const fullHeight = document.body.getBoundingClientRect().height;
 
             canvas.width = window.innerWidth * dpr;
@@ -384,13 +383,11 @@
             });
         }
 
-        // Следим за масштабированием и ресайзом
         window.addEventListener('resize', () => {
             clearTimeout(window.resizeTimeout);
             window.resizeTimeout = setTimeout(resize, 100);
         });
 
-        // Дополнительный фикс для зума в Chrome/Safari
         window.matchMedia('(resolution: 1dppx)').addListener(resize);
         
         window.addEventListener('load', () => {
