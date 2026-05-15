@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEWO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lite Edition — MEWO</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
@@ -16,382 +17,171 @@
             --text-muted: #888888;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            line-height: 1.5;
-            overflow-x: hidden;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
         }
 
-        #constellation-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.5;
+        .back-btn {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover { color: var(--accent); }
+
+        .header { text-align: center; margin-bottom: 60px; }
+        .header h1 { font-size: 3rem; letter-spacing: -2px; margin-bottom: 10px; }
+        .header p { color: var(--text-muted); font-weight: 300; }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .price-card {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            padding: 40px 20px;
+            text-align: center;
+            transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .duration {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
             display: block;
         }
 
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 25px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(20px);
-            background: rgba(5, 5, 5, 0.7);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
+        .amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: block;
         }
 
-        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 2px; text-decoration: none; color: var(--text-main); }
-        .nav-right { display: flex; align-items: center; gap: 40px; }
-        .nav-links { display: flex; gap: 40px; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.3s; cursor: pointer; }
-        .nav-links a:hover { color: var(--accent); }
+        .buy-btn {
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 0;
+            display: block;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
 
-        .toggle-interaction {
+        .buy-btn:hover {
+            background: transparent;
+            color: var(--accent);
+            outline: 1px solid var(--accent);
+        }
+
+        .lang-switch {
+            position: fixed;
+            bottom: 40px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .lang-btn {
             background: transparent;
             border: 1px solid var(--border);
             color: var(--text-muted);
-            padding: 8px 16px;
+            padding: 5px 12px;
             font-size: 0.7rem;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
             cursor: pointer;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: 0.3s;
         }
 
-        .toggle-interaction.active { background: var(--accent); color: #000; border-color: var(--accent); }
-        .toggle-interaction .status-dot { width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
-
-        section {
-            padding: 140px 8% 80px 8%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative; 
-            z-index: 1;
-        }
-
-        .hero { text-align: center; align-items: center; }
-        h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 800; letter-spacing: -4px; margin-bottom: 20px; line-height: 0.9; }
-        .hero-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin-bottom: 50px; font-weight: 300; }
-
-        .version-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; margin: 40px auto 0 auto; }
-        .version-card { background: var(--secondary); border: 1px solid var(--border); padding: 50px; border-radius: 4px; text-align: center; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
-        .version-card:hover { border-color: rgba(255, 255, 255, 0.4); transform: translateY(-10px); }
-        
-        .version-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; }
-        .version-name { font-size: 1.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px; }
-        .v-tag { font-size: 0.65rem; padding: 2px 10px; border: 1px solid var(--border); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-
-        .feature-list { list-style: none; margin: 20px 0; color: var(--text-muted); font-size: 0.9rem; text-align: left; width: fit-content; }
-        .feature-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 15px; }
-        .feature-list li::before { content: ""; width: 4px; height: 4px; background: var(--accent); flex-shrink: 0; }
-
-        .btn-black { display: block; text-align: center; padding: 20px; background: var(--accent); color: #000; text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; width: 100%; max-width: 250px; margin: 10px auto; }
-        .btn-black:hover { background: transparent; color: var(--accent); outline: 1px solid var(--accent); }
-
-        .install-container { max-width: 1100px; margin: 0 auto; width: 100%; text-align: center; }
-        .btn-install { max-width: 100% !important; margin: 0 !important; padding: 25px !important; font-size: 1.1rem !important; border: 1px solid var(--accent); }
-
-        footer { padding: 100px 8% 50px 8%; border-top: 1px solid var(--border); background: var(--bg); position: relative; z-index: 10; display: flex; flex-direction: column; gap: 40px; }
-        .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
-        .footer-col h4 { font-size: 0.8rem; text-transform: uppercase; margin-bottom: 20px; color: var(--text-main); }
-        .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; margin-bottom: 10px; transition: 0.3s; }
-        .footer-col a:hover { color: var(--accent); }
-        
-        .lang-switch { display: flex; gap: 15px; margin-top: 10px; }
-        .lang-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 5px 12px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
         .lang-btn.active { border-color: var(--accent); color: var(--accent); }
 
-        .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #444; text-transform: uppercase; letter-spacing: 1px; }
-
         @media (max-width: 768px) {
-            h1 { font-size: 3.2rem; }
-            .nav-links { display: none; }
-            .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+            .back-btn { top: 20px; left: 20px; }
+            .header h1 { font-size: 2rem; }
+            .price-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="constellation-canvas"></canvas>
+    <a href="index.html" class="back-btn" data-lang-en="← Back" data-lang-ru="← Назад">← Back</a>
 
-    <nav>
-        <a href="#" class="logo">MEWO</a>
-        <div class="nav-right">
-            <div class="nav-links">
-                <a href="#home" data-lang-en="Home" data-lang-ru="Главная">Home</a>
-                <a href="#versions" data-lang-en="Edition" data-lang-ru="Издание">Edition</a>
-                <a onclick="document.getElementById('main-footer').scrollIntoView()" data-lang-en="More" data-lang-ru="Ещё">More</a>
-            </div>
-            <button id="toggle-magnet" class="toggle-interaction active">
-                <span class="status-dot"></span>
-                <span data-lang-en="Interactive" data-lang-ru="Интерактив">Interactive</span>
-            </button>
-        </div>
-    </nav>
+    <div class="header" data-aos="fade-down">
+        <h1 data-lang-en="LITE EDITION" data-lang-ru="LITE EDITION">LITE EDITION</h1>
+        <p data-lang-en="Select your preferred subscription period" data-lang-ru="Выберите подходящий период подписки">Select your preferred subscription period</p>
+    </div>
 
-    <section id="home" class="hero">
-        <h1 data-aos="fade-up">MEWO CLIENT</h1>
-        <p class="hero-desc" data-aos="fade-up" data-aos-delay="200"
-           data-lang-en="Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming."
-           data-lang-ru="Профессиональная интеграция для DDRaceNetwork. Превосходная производительность, обширный функционал и минималистичный подход к игре.">
-            Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming.
-        </p>
-        <div data-aos="fade-up" data-aos-delay="400">
-            <a href="#versions" class="btn-black" data-lang-en="Get Started" data-lang-ru="Начать">Get Started</a>
+    <div class="price-grid">
+        <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+            <span class="duration" data-lang-en="7 Days" data-lang-ru="7 Дней">7 Days</span>
+            <span class="amount">$1.99</span>
+            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
         </div>
-    </section>
+        <div class="price-card" data-aos="fade-up" data-aos-delay="200">
+            <span class="duration" data-lang-en="30 Days" data-lang-ru="30 Дней">30 Days</span>
+            <span class="amount">$3.99</span>
+            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
+        </div>
+        <div class="price-card" data-aos="fade-up" data-aos-delay="300">
+            <span class="duration" data-lang-en="90 Days" data-lang-ru="90 Дней">90 Days</span>
+            <span class="amount">$8.99</span>
+            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
+        </div>
+        <div class="price-card" data-aos="fade-up" data-aos-delay="400">
+            <span class="duration" data-lang-en="Lifetime" data-lang-ru="Навсегда">Lifetime</span>
+            <span class="amount">$24.99</span>
+            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
+        </div>
+    </div>
 
-    <section id="versions">
-        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px; text-align: center;" data-aos="fade-up"
-            data-lang-en="Select Edition" data-lang-ru="Выберите издание">Select Edition</h2>
-        <div class="version-grid">
-            <div class="version-card" data-aos="fade-up">
-                <div class="version-header">
-                    <span class="version-name">Lite</span>
-                    <span class="v-tag" data-lang-en="Limited edition" data-lang-ru="Ограниченное издание">Limited edition</span>
-                </div>
-                <p style="color: var(--text-muted); font-size: 0.9rem;"
-                   data-lang-en="A huge number of features for a convenient and enjoyable game."
-                   data-lang-ru="Огромное количество функции для удобной и комфортной игры.">
-                    A huge number of features for a convenient and enjoyable game.
-                </p>
-                <ul class="feature-list">
-                    <li data-lang-en="Many features" data-lang-ru="Множество функции">Many features</li>
-                    <li data-lang-en="Convenient and flexible HUD customization" data-lang-ru="Удобная и гибкая настройка HUD">Convenient and flexible HUD customization</li>
-                    <li data-lang-en="Visual improvements for DDRace" data-lang-ru="Визуальные улучшения DDRace">Visual improvements for DDRace</li>
-                    <li data-lang-en="Improved optimization" data-lang-ru="Улучшенная оптимизация">Improved optimization</li>
-                </ul>
-                <a href="lite" class="btn-black" data-lang-en="Purchase Lite" data-lang-ru="Приобрести Lite">Purchase Lite</a>
-            </div>
-
-            <div class="version-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="version-header">
-                    <span class="version-name">Full</span>
-                    <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
-                </div>
-                <p style="color: var(--text-muted); font-size: 0.9rem;"
-                   data-lang-en="Maximum control over game mechanics. Every tool required for technical dominance."
-                   data-lang-ru="Максимальный контроль над игровой механикой. Все инструменты для технического доминирования.">
-                    Maximum control over game mechanics. Every tool required for technical dominance.
-                </p>
-                <ul class="feature-list">
-                    <li data-lang-en="Even more features" data-lang-ru="Ещё больше функции">Even more features</li>
-                    <li data-lang-en="Latency Compensation" data-lang-ru="Компенсация задержки">Latency Compensation</li>
-                    <li data-lang-en="State Persistence Modules" data-lang-ru="Настройки физического движка">State Persistence Modules</li>
-                    <li data-lang-en="Physics Engine Tweaks" data-lang-ru="Модули сохранения состояния">Physics Engine Tweaks</li>
-                </ul>
-                <a href="full" class="btn-black" data-lang-en="Purchase Full" data-lang-ru="Приобрести Full">Purchase Full</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="download" style="min-height: auto; padding: 0 8% 140px 8%;">
-        <div class="install-container" data-aos="fade-up">
-            <a href="temp" class="btn-black btn-install"
-                data-lang-en="DOWNLOAD MEWO LAUNCHER" data-lang-ru="СКАЧАТЬ MEWO LAUNCHER">DOWNLOAD MEWO LAUNCHER</a>
-        </div>
-    </section>
-
-    <footer id="main-footer">
-        <div class="footer-top">
-            <div class="footer-col">
-                <h4 data-lang-en="Legal" data-lang-ru="Юридическая информация">Legal</h4>
-                <a href="tos" data-lang-en="Terms of Service" data-lang-ru="Условия использования">Terms of Service</a>
-                <a href="privacy" data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности">Privacy Policy</a>
-                <div class="lang-switch">
-                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
-                    <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
-                </div>
-            </div>
-            <div class="footer-col">
-                <h4 data-lang-en="Community" data-lang-ru="Сообщество">Community</h4>
-                <a href="https://discord.gg/y8B8TE2gx7" target="_blank">Discord</a>
-                <a href="#">GitHub</a>
-                <a href="https://www.youtube.com/channel/UCmu_mEJv8jmadc2OxUCkScw" target="_blank">YouTube</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span data-lang-en="&copy; 2026 MEWO PROJECT. ALL RIGHTS RESERVED" data-lang-ru="&copy; 2026 ПРОЕКТ MEWO. ВСЕ ПРАВА ЗАЩИЩЕНЫ">&copy; 2026 MEWO PROJECT. ALL RIGHTS RESERVED</span>
-            <span data-lang-en="NOT AFFILIATED WITH DDRACENETWORK" data-lang-ru="НЕ СВЯЗАНО С DDRACENETWORK">NOT AFFILIATED WITH DDRACENETWORK</span>
-        </div>
-    </footer>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        const canvas = document.getElementById('constellation-canvas');
-        const ctx = canvas.getContext('2d', { alpha: true });
-        const magnetBtn = document.getElementById('toggle-magnet');
-        
-        let particles = [];
-        let isMagnetEnabled = true;
-        const mouse = { x: null, y: null, radius: 180 };
-
-        magnetBtn.addEventListener('click', () => {
-            isMagnetEnabled = !isMagnetEnabled;
-            magnetBtn.classList.toggle('active', isMagnetEnabled);
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.pageX;
-            mouse.y = e.pageY;
-        });
-
-        function resize() {
-            const dpr = window.devicePixelRatio || 1;
-            const fullHeight = Math.max(
-                document.body.scrollHeight, 
-                document.documentElement.scrollHeight
-            );
-
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = fullHeight * dpr;
-            canvas.style.width = window.innerWidth + 'px';
-            canvas.style.height = fullHeight + 'px';
-            
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            init(fullHeight);
-        }
-
-        class Particle {
-            constructor(canvasHeight) {
-                this.canvasHeight = canvasHeight;
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * this.canvasHeight;
-                this.vx = (Math.random() - 0.5) * 0.8;
-                this.vy = (Math.random() - 0.5) * 0.8;
-                this.size = 1.2;
-                this.minSpeed = 0.2;
-            }
-
-            update() {
-                if (isMagnetEnabled && mouse.x !== null) {
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < mouse.radius) {
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        this.vx += (dx / distance) * force * 0.04;
-                        this.vy += (dy / distance) * force * 0.04;
-                    }
-                }
-
-                this.vx *= 0.995;
-                this.vy *= 0.995;
-
-                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                if (speed < this.minSpeed) {
-                    this.vx *= 1.05;
-                    this.vy *= 1.05;
-                }
-
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0) this.x = window.innerWidth;
-                if (this.x > window.innerWidth) this.x = 0;
-                if (this.y < 0) this.y = this.canvasHeight;
-                if (this.y > this.canvasHeight) this.y = 0;
-            }
-
-            draw() {
-                ctx.fillStyle = '#fff';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function init(fullHeight) {
-            particles = [];
-            const area = window.innerWidth * fullHeight;
-            const count = Math.floor(area / 15000); 
-            const limit = 450; 
-            for (let i = 0; i < Math.min(count, limit); i++) {
-                particles.push(new Particle(fullHeight));
-            }
-        }
-
-        function animate() {
-            const dpr = window.devicePixelRatio || 1;
-            const fullHeight = parseFloat(canvas.style.height);
-
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            ctx.clearRect(0, 0, window.innerWidth, fullHeight);
-
-            const scrollY = window.scrollY;
-            const viewportHeight = window.innerHeight;
-            const margin = 200; 
-
-            for (let i = 0; i < particles.length; i++) {
-                const p1 = particles[i];
-                p1.update();
-                if (p1.y < scrollY - margin || p1.y > scrollY + viewportHeight + margin) continue;
-                p1.draw();
-
-                for (let j = i + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    if (Math.abs(p1.y - p2.y) > 120) continue;
-                    const dx = p1.x - p2.x;
-                    const dy = p1.y - p2.y;
-                    const distSq = dx * dx + dy * dy;
-
-                    if (distSq < 14400) { // 120^2
-                        const dist = Math.sqrt(distSq);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 * (1 - dist / 120)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
+        AOS.init({ once: true });
         function setLanguage(lang) {
             document.querySelectorAll('[data-lang-en]').forEach(el => {
-                const translation = el.getAttribute(`data-lang-${lang}`);
-                if (translation) el.textContent = translation;
+                el.textContent = el.getAttribute(`data-lang-${lang}`);
             });
             document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
             });
         }
-
-        window.addEventListener('resize', () => {
-            setTimeout(resize, 100);
-        });
-        
-        window.addEventListener('load', () => {
-            AOS.init({ duration: 800, once: true });
-            resize();
-            animate();
-        });
     </script>
 </body>
 </html>
