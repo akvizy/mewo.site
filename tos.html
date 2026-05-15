@@ -47,7 +47,6 @@
 
         hr { border: 0; border-top: 1px solid var(--border); margin: 60px 0; }
 
-        /* Стили для переключателя языков */
         .lang-switch {
             display: flex;
             gap: 15px;
@@ -137,7 +136,6 @@
                 }
             });
 
-            // Обновление состояния кнопок
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
