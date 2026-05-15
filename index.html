@@ -65,6 +65,7 @@
         .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.3s; cursor: pointer; }
         .nav-links a:hover { color: var(--accent); }
 
+        /* Кнопка Interactive с улучшенным фидбеком */
         .toggle-interaction {
             background: transparent;
             border: 1px solid var(--border);
@@ -80,34 +81,69 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            outline: none;
+            overflow: hidden;
         }
 
+        /* Состояние "Включено" (Активно) */
         .toggle-interaction.active { 
             background: var(--accent); 
             color: #000; 
             border-color: var(--accent); 
         }
 
+        /* Наведение (делаем кнопку прозрачной, но сохраняем акцент) */
         .toggle-interaction:hover {
             border-color: var(--accent);
             color: var(--accent);
-            background: transparent;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
         }
 
+        /* Важно: если кнопка активна И под курсором, даем понять, что она все еще "белая" внутри */
         .toggle-interaction.active:hover {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.1);
             color: var(--accent);
-            border-color: var(--accent);
         }
 
+        /* Физический отклик при нажатии */
+        .toggle-interaction:active {
+            transform: scale(0.92);
+        }
+
+        /* Индикатор состояния (точка) — теперь она главный ориентир */
         .toggle-interaction .status-dot { 
             width: 6px; 
             height: 6px; 
-            background: currentColor; 
+            background: var(--text-muted); 
             border-radius: 50%; 
+            transition: all 0.3s ease;
+            box-shadow: none;
+        }
+
+        /* Если активно, точка всегда ярко светится, даже под курсором */
+        .toggle-interaction.active .status-dot {
+            background: #000; /* Черная на белом фоне */
+        }
+
+        .toggle-interaction.active:hover .status-dot {
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent); /* Свечение точки при наведении */
+        }
+
+        /* Анимация вспышки при переключении */
+        @keyframes click-flash {
+            0% { background: rgba(255, 255, 255, 0.5); }
+            100% { background: transparent; }
+        }
+
+        .toggle-interaction.clicked::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            animation: click-flash 0.4s ease-out;
+            pointer-events: none;
         }
 
         section {
@@ -136,8 +172,9 @@
         .feature-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 15px; }
         .feature-list li::before { content: ""; width: 4px; height: 4px; background: var(--accent); flex-shrink: 0; }
 
-        .btn-black { display: block; text-align: center; padding: 20px; background: var(--accent); color: #000; text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; width: 100%; max-width: 250px; margin: 10px auto; cursor: pointer; border: none; }
+        .btn-black { display: block; text-align: center; padding: 20px; background: var(--accent); color: #000; text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.2s ease; width: 100%; max-width: 250px; margin: 10px auto; cursor: pointer; border: none; }
         .btn-black:hover { background: transparent; color: var(--accent); outline: 1px solid var(--accent); }
+        .btn-black:active { transform: scale(0.96); }
 
         .install-container { max-width: 1100px; margin: -40px auto 0 auto; width: 100%; text-align: center; }
         .btn-install { max-width: 100% !important; margin: 0 !important; padding: 25px !important; font-size: 1.1rem !important; border: 1px solid var(--accent); }
@@ -278,7 +315,6 @@
         let isMagnetEnabled = true;
         const mouse = { x: null, y: null, radius: 180 };
 
-        // Функция плавной прокрутки без изменения URL
         function scrollToSection(id) {
             const element = document.getElementById(id);
             if (element) {
@@ -286,9 +322,14 @@
             }
         }
 
+        // Обработчик клика с анимацией вспышки
         magnetBtn.addEventListener('click', () => {
             isMagnetEnabled = !isMagnetEnabled;
             magnetBtn.classList.toggle('active', isMagnetEnabled);
+            
+            // Добавляем класс для эффекта вспышки
+            magnetBtn.classList.add('clicked');
+            setTimeout(() => magnetBtn.classList.remove('clicked'), 400);
         });
 
         window.addEventListener('mousemove', (e) => {
