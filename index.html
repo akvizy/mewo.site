@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEWO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Библиотека AOS для анимаций -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
@@ -33,7 +32,6 @@
             overflow-x: hidden;
         }
 
-        /* Кастомный скроллбар */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
@@ -198,7 +196,6 @@
             outline: 1px solid var(--accent);
         }
 
-        /* Стили для секции установки */
         .install-container {
             max-width: 1100px;
             margin: 0 auto;
@@ -207,8 +204,8 @@
         }
 
         .btn-install {
-            max-width: 100% !important; /* Делаем кнопку длинной */
-            margin-top: 0 !important; /* Убираем отступ сверху для плотного прилегания */
+            max-width: 100% !important;
+            margin-top: 0 !important;
             padding: 25px !important;
             font-size: 1.1rem !important;
             border: 1px solid var(--accent);
@@ -366,10 +363,8 @@
         </div>
     </section>
 
-    <!-- СЕКЦИЯ СКАЧИВАНИЯ -->
     <section id="download" style="min-height: auto; padding: 0 8% 80px 8%;">
         <div class="install-container" data-aos="fade-up">
-            <!-- Ссылка на файл с GitHub -->
             <a href="https://github.com/akvizy/mewo-site/raw/main/mewo_client.zip" class="btn-black btn-install" download
                data-lang-en="Download MEWO Client (.zip)" data-lang-ru="Скачать MEWO Client (.zip)">Download MEWO Client (.zip)</a>
         </div>
@@ -400,7 +395,6 @@
                 <h4 data-lang-en="Legal" data-lang-ru="Юридическая информация">Legal</h4>
                 <a href="tos" data-lang-en="Terms of Service" data-lang-ru="Условия использования">Terms of Service</a>
                 <a href="privacy" data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности">Privacy Policy</a>
-                <a href="dmca" data-lang-en="DMCA" data-lang-ru="DMCA">DMCA</a>
                 <div class="lang-switch">
                     <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
                     <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
@@ -409,7 +403,7 @@
             <div class="footer-col">
                 <h4 data-lang-en="Community" data-lang-ru="Сообщество">Community</h4>
                 <a href="https://discord.gg/y8B8TE2gx7" target="_blank" data-lang-en="Discord Server" data-lang-ru="Дискорд сервер">Discord Server</a>
-                <a href="" data-lang-en="GitHub Repo" data-lang-ru="Репозиторий GitHub">GitHub Repo</a>
+                <a href="" data-lang-en="GitHub Repositories" data-lang-ru="Репозиторий GitHub">GitHub Repo</a>
                 <a href="https://www.youtube.com/channel/UCmu_mEJv8jmadc2OxUCkScw" target="_blank" rel="noopener noreferrer" data-lang-en="YouTube" data-lang-ru="Ютуб">YouTube</a>
             </div>
         </div>
@@ -439,7 +433,6 @@
                 }
             });
 
-            // Update buttons state
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
