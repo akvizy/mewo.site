@@ -18,10 +18,7 @@
         }
 
         [data-aos] {
-            pointer-events: none;
-        }
-        .aos-animate {
-            pointer-events: auto !important;
+            transition-property: transform, opacity;
         }
 
         * {
@@ -313,7 +310,7 @@
             }
             
             if (window.AOS) {
-                AOS.refreshHard();
+                AOS.refresh();
             }
 
             init(fullHeight);
@@ -430,42 +427,26 @@
         });
 
         function bootAOS() {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
             AOS.init({ 
                 duration: 800, 
                 once: true,
-                offset: isMobile ? 20 : 120,
+                offset: 50,
                 easing: 'ease-out-quart',
-                startEvent: 'load',
-                disableMutationObserver: false,
-                debounceDelay: 50,
-                throttleDelay: 99
+                startEvent: 'DOMContentLoaded'
             });
 
-            setTimeout(() => {
-                AOS.refreshHard();
-            }, 100);
+            window.addEventListener('load', () => {
+                AOS.refresh();
+            });
         }
 
-        window.addEventListener('load', () => {
-            bootAOS();
-            resize();
-            animate();
-        });
+        bootAOS();
+        resize();
+        animate();
 
-        let initialScrollRefresh = false;
         window.addEventListener('scroll', () => {
-            if (!initialScrollRefresh) {
-                AOS.refreshHard();
-                initialScrollRefresh = true;
-            }
+            AOS.refresh();
         }, { once: true });
-
-        const resizeObserver = new ResizeObserver(() => {
-            if (window.AOS) AOS.refreshHard();
-        });
-        resizeObserver.observe(document.body);
     </script>
 </body>
 </html>
