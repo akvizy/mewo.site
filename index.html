@@ -93,7 +93,7 @@
         .toggle-interaction.active { background: var(--accent); color: #000; border-color: var(--accent); }
         .toggle-interaction:hover { border-color: var(--accent); color: var(--accent); background: rgba(255, 255, 255, 0.05); }
         .toggle-interaction.active:hover { background: rgba(255, 255, 255, 0.1); color: var(--accent); }
-        .toggle-interaction:active { transform: scale(0.92); }
+        /* Удалена анимация вдавливания (active scale) для этой кнопки */
 
         .toggle-interaction .status-dot { 
             width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; transition: all 0.3s ease;
@@ -279,8 +279,7 @@
         magnetBtn.addEventListener('click', () => {
             isMagnetEnabled = !isMagnetEnabled;
             magnetBtn.classList.toggle('active', isMagnetEnabled);
-            magnetBtn.classList.add('clicked');
-            setTimeout(() => magnetBtn.classList.remove('clicked'), 400);
+            // Визуальный отклик теперь только через изменение цвета и точки
         });
 
         window.addEventListener('mousemove', (e) => {
