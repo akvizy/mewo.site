@@ -46,7 +46,6 @@
             pointer-events: none;
             opacity: 0.5;
             display: block;
-            overflow: hidden;
         }
 
         nav {
@@ -93,7 +92,6 @@
         .toggle-interaction.active { background: var(--accent); color: #000; border-color: var(--accent); }
         .toggle-interaction:hover { border-color: var(--accent); color: var(--accent); background: rgba(255, 255, 255, 0.05); }
         .toggle-interaction.active:hover { background: rgba(255, 255, 255, 0.1); color: var(--accent); }
-        /* Удалена анимация вдавливания (active scale) для этой кнопки */
 
         .toggle-interaction .status-dot { 
             width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; transition: all 0.3s ease;
@@ -270,6 +268,7 @@
         let particles = [];
         let isMagnetEnabled = magnetBtn.classList.contains('active'); 
         const mouse = { x: null, y: null, radius: 180 };
+        let lastWidth = window.innerWidth;
 
         function scrollToSection(id) {
             const element = document.getElementById(id);
@@ -279,7 +278,6 @@
         magnetBtn.addEventListener('click', () => {
             isMagnetEnabled = !isMagnetEnabled;
             magnetBtn.classList.toggle('active', isMagnetEnabled);
-            // Визуальный отклик теперь только через изменение цвета и точки
         });
 
         window.addEventListener('mousemove', (e) => {
@@ -294,25 +292,33 @@
 
         function resize() {
             const dpr = window.devicePixelRatio || 1;
+            const currentWidth = window.innerWidth;
             const fullHeight = document.body.getBoundingClientRect().height;
-            canvas.width = window.innerWidth * dpr;
+
+            // На телефонах высота меняется при появлении адресной строки.
+            // Пересоздаем частицы только если ширина изменилась значительно (поворот экрана).
+            const widthChanged = Math.abs(currentWidth - lastWidth) > 50;
+
+            canvas.width = currentWidth * dpr;
             canvas.height = fullHeight * dpr;
-            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.width = currentWidth + 'px';
             canvas.style.height = fullHeight + 'px';
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             
-            if (window.innerWidth <= 768) {
+            if (currentWidth <= 768) {
                 isMagnetEnabled = false;
                 magnetBtn.classList.remove('active');
-            } else {
-                isMagnetEnabled = magnetBtn.classList.contains('active');
-            }
-            
-            if (window.AOS) {
-                AOS.refresh();
             }
 
-            init(fullHeight);
+            if (widthChanged || particles.length === 0) {
+                lastWidth = currentWidth;
+                init(fullHeight);
+            } else {
+                // Если ширина не менялась, просто обновляем лимит высоты для существующих частиц
+                particles.forEach(p => p.canvasHeight = fullHeight);
+            }
+            
+            if (window.AOS) AOS.refresh();
         }
 
         class Particle {
@@ -346,6 +352,7 @@
                 }
                 this.x += this.vx;
                 this.y += this.vy;
+                
                 if (this.x < 0) this.x = window.innerWidth;
                 if (this.x > window.innerWidth) this.x = 0;
                 if (this.y < 0) this.y = this.canvasHeight;
@@ -372,16 +379,19 @@
 
         function animate() {
             const dpr = window.devicePixelRatio || 1;
-            const fullHeight = parseFloat(canvas.style.height);
+            const currentCanvasHeight = parseFloat(canvas.style.height);
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            ctx.clearRect(0, 0, window.innerWidth, fullHeight);
+            ctx.clearRect(0, 0, window.innerWidth, currentCanvasHeight);
+            
             const scrollY = window.scrollY;
             const viewportHeight = window.innerHeight;
-            const margin = 200; 
+            const margin = 300; 
 
             for (let i = 0; i < particles.length; i++) {
                 const p1 = particles[i];
                 p1.update();
+                
+                // Оптимизация: рисуем только то, что близко к области видимости
                 if (p1.y < scrollY - margin || p1.y > scrollY + viewportHeight + margin) continue;
                 p1.draw();
 
@@ -418,34 +428,19 @@
 
         window.addEventListener('resize', () => {
             clearTimeout(window.resizeTimeout);
-            window.resizeTimeout = setTimeout(resize, 100);
+            window.resizeTimeout = setTimeout(resize, 150);
         });
 
-        window.addEventListener('orientationchange', () => {
-            setTimeout(resize, 300);
-        });
-
-        function bootAOS() {
-            AOS.init({ 
-                duration: 800, 
-                once: true,
-                offset: 50,
-                easing: 'ease-out-quart',
-                startEvent: 'DOMContentLoaded'
-            });
-
-            window.addEventListener('load', () => {
-                AOS.refresh();
-            });
-        }
-
-        bootAOS();
+        // Блокируем сброс частиц при малых изменениях высоты (скролл на мобильных)
         resize();
         animate();
 
-        window.addEventListener('scroll', () => {
-            AOS.refresh();
-        }, { once: true });
+        AOS.init({ 
+            duration: 800, 
+            once: true,
+            offset: 50,
+            easing: 'ease-out-quart'
+        });
     </script>
 </body>
 </html>
