@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Under Development — MEWO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
         :root {
@@ -13,6 +14,13 @@
             --text-muted: #888888;
             --border: rgba(255, 255, 255, 0.1);
             --accent: #ffffff;
+        }
+
+        [data-aos] {
+            pointer-events: none;
+        }
+        .aos-animate {
+            pointer-events: auto !important;
         }
 
         * {
@@ -27,11 +35,10 @@
             font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
+            overflow: hidden;
         }
 
         .back-link {
@@ -44,9 +51,19 @@
             transition: color 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
+            z-index: 10;
         }
 
         .back-link:hover { color: #fff; }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
 
         .status-tag {
             font-size: 0.7rem;
@@ -59,10 +76,11 @@
         }
 
         h1 {
-            font-size: clamp(2rem, 8vw, 4rem);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 800;
-            letter-spacing: -2px;
+            letter-spacing: -3px;
             margin-bottom: 15px;
+            line-height: 1;
         }
 
         p {
@@ -71,60 +89,62 @@
             font-weight: 300;
             line-height: 1.6;
             margin-bottom: 40px;
+            font-size: 1rem;
         }
 
-        /* Symmetric Expand Loader */
+        /* Полоска: задержка увеличена, анимация замедлена */
         .loader-container {
-            width: 120px;
+            width: 200px;
             height: 1px;
-            background: var(--border);
+            background: var(--accent);
             position: relative;
             margin-bottom: 50px;
+            transform: scaleX(0);
+            opacity: 0;
+            /* Замедление до 2.5с и задержка до 1.5с */
+            animation: revealLine 2.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            animation-delay: 1.5s;
         }
 
-        .loader-container::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            width: 0;
-            height: 100%;
-            background: var(--accent);
-            transform: translateX(-50%);
-            animation: l6 2s infinite ease-in-out;
+        @keyframes revealLine {
+            0% {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scaleX(1);
+                opacity: 1;
+            }
         }
 
-        @keyframes l6 {
-            0%, 100% { width: 0; opacity: 0; }
-            50% { width: 100%; opacity: 1; }
-        }
-
-        /* Donation Button Style */
         .donate-btn {
             display: inline-block;
-            padding: 12px 30px;
+            padding: 14px 34px;
             border: 1px solid var(--border);
             color: var(--text);
             text-decoration: none;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             background: transparent;
+            position: relative;
+            overflow: hidden;
         }
 
         .donate-btn:hover {
             border-color: var(--accent);
             background: var(--accent);
             color: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transform: translateY(-3px);
         }
 
         .lang-switch {
             display: flex;
             gap: 15px;
+            margin-top: 20px;
         }
 
         .lang-btn {
@@ -132,10 +152,11 @@
             border: 1px solid var(--border);
             color: var(--text-muted);
             padding: 6px 14px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.3s;
+            letter-spacing: 1px;
         }
 
         .lang-btn.active {
@@ -143,44 +164,56 @@
             color: var(--accent);
         }
 
-        footer {
-            position: absolute;
-            bottom: 40px;
-            font-size: 0.7rem;
-            color: #222;
-            letter-spacing: 1px;
+        @media (max-width: 768px) {
+            .back-link { top: 20px; left: 5%; font-size: 0.8rem; }
+            body { padding-top: 80px; }
+            .loader-container { width: 160px; }
         }
     </style>
 </head>
 <body>
 
-    <a href="https://mewo.site/" class="back-link" data-lang-en="← Back" data-lang-ru="← Назад">← Back</a>
+    <a href="https://mewo.site/" class="back-link" data-aos="fade-right" data-lang-en="← Back" data-lang-ru="← Назад">← Back</a>
 
-    <div class="status-tag" data-lang-en="Work in progress" data-lang-ru="В разработке">Work in progress</div>
-    
-    <h1 data-lang-en="Coming Soon" data-lang-ru="Скоро будет">Coming Soon</h1>
-    
-    <p data-lang-en="We are currently polishing the client to ensure the best possible experience. Stay tuned for updates in our Discord."
-       data-lang-ru="Сейчас мы дорабатываем клиент, чтобы обеспечить наилучший результат. Следите за обновлениями в нашем Discord.">
-        We are currently polishing the client to ensure the best possible experience. Stay tuned for updates in our Discord.
-    </p>
+    <main>
+        <div class="status-tag" data-aos="fade-down" data-aos-delay="200" data-lang-en="Work in progress" data-lang-ru="В разработке">Work in progress</div>
+        
+        <h1 data-aos="fade-up" data-aos-delay="400" data-lang-en="Coming Soon" data-lang-ru="Скоро будет">Coming Soon</h1>
+        
+        <p data-aos="fade-up" data-aos-delay="600" 
+           data-lang-en="We are currently polishing the client to ensure the best possible experience. Stay tuned for updates in our Discord."
+           data-lang-ru="Сейчас мы дорабатываем клиент, чтобы обеспечить наилучший результат. Следите за обновлениями в нашем Discord.">
+            We are currently polishing the client to ensure the best possible experience. Stay tuned for updates in our Discord.
+        </p>
 
-    <div class="loader-container"></div>
+        <div class="loader-container"></div>
 
-    <!-- Кнопка доната -->
-    <a href="https://www.donationalerts.com/r/akvis" target="_blank" rel="noopener noreferrer" class="donate-btn" 
-       data-lang-en="Support Development" data-lang-ru="Поддержать разработку">
-        Support Development
-    </a>
+        <a href="https://www.donationalerts.com/r/akvis" target="_blank" rel="noopener noreferrer" class="donate-btn" 
+           data-aos="fade-up" data-aos-delay="1800"
+           data-lang-en="Support Development" data-lang-ru="Поддержать разработку">
+            Support Development
+        </a>
 
-    <div class="lang-switch">
-        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
-        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
-    </div>
+        <div class="lang-switch" data-aos="fade-up" data-aos-delay="2000">
+            <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+            <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+        </div>
+    </main>
 
-    <footer>© 2026 MEWO PROJECT</footer>
-
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Инициализация AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-out-quart',
+            startEvent: 'DOMContentLoaded'
+        });
+
+        window.addEventListener('load', () => {
+            AOS.refresh();
+        });
+
         function setLanguage(lang) {
             const elements = document.querySelectorAll('[data-lang-en]');
             elements.forEach(el => {
