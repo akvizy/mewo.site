@@ -17,6 +17,13 @@
             --text-muted: #888888;
         }
 
+        [data-aos] {
+            pointer-events: none;
+        }
+        .aos-animate {
+            pointer-events: auto !important;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -98,16 +105,6 @@
         .toggle-interaction.active .status-dot { background: #000; }
         .toggle-interaction.active:hover .status-dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
 
-        @keyframes click-flash {
-            0% { background: rgba(255, 255, 255, 0.5); }
-            100% { background: transparent; }
-        }
-
-        .toggle-interaction.clicked::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            animation: click-flash 0.4s ease-out; pointer-events: none;
-        }
-
         section {
             padding: 140px 8% 80px 8%;
             min-height: 100vh;
@@ -181,13 +178,13 @@
     </nav>
 
     <section id="home" class="hero">
-        <h1 data-aos="fade-up" data-aos-anchor-placement="top-bottom">MEWO CLIENT</h1>
-        <p class="hero-desc" data-aos="fade-up" data-aos-delay="100" data-aos-anchor-placement="top-bottom"
+        <h1 data-aos="fade-up">MEWO CLIENT</h1>
+        <p class="hero-desc" data-aos="fade-up" data-aos-delay="100"
            data-lang-en="Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming."
            data-lang-ru="Профессиональная интеграция для DDRaceNetwork. Превосходная производительность, обширный функционал и минималистичный подход к игре.">
             Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming.
         </p>
-        <div data-aos="fade-up" data-aos-delay="200" data-aos-anchor-placement="top-bottom">
+        <div data-aos="fade-up" data-aos-delay="200">
             <button onclick="scrollToSection('versions')" class="btn-black" data-lang-en="Get Started" data-lang-ru="Начать">Get Started</button>
         </div>
     </section>
@@ -344,7 +341,6 @@
                         this.vy += (dy / distance) * force * 0.04;
                     }
                 }
-
                 this.vx *= 0.995;
                 this.vy *= 0.995;
                 const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
@@ -352,10 +348,8 @@
                     this.vx *= 1.05;
                     this.vy *= 1.05;
                 }
-
                 this.x += this.vx;
                 this.y += this.vy;
-
                 if (this.x < 0) this.x = window.innerWidth;
                 if (this.x > window.innerWidth) this.x = 0;
                 if (this.y < 0) this.y = this.canvasHeight;
@@ -435,24 +429,38 @@
             setTimeout(resize, 300);
         });
 
-        window.addEventListener('load', () => {
-            const isMobile = window.innerWidth <= 768;
+        function bootAOS() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
             AOS.init({ 
                 duration: 800, 
                 once: true,
-                offset: isMobile ? 50 : 120,
-                delay: 0,
-                easing: 'ease-out-quad',
-                startEvent: 'DOMContentLoaded',
-                disableMutationObserver: false
+                offset: isMobile ? 20 : 120,
+                easing: 'ease-out-quart',
+                startEvent: 'load',
+                disableMutationObserver: false,
+                debounceDelay: 50,
+                throttleDelay: 99
             });
+
+            setTimeout(() => {
+                AOS.refreshHard();
+            }, 100);
+        }
+
+        window.addEventListener('load', () => {
+            bootAOS();
             resize();
             animate();
-            
-            setTimeout(() => {
-                if (window.AOS) AOS.refreshHard();
-            }, 500);
         });
+
+        let initialScrollRefresh = false;
+        window.addEventListener('scroll', () => {
+            if (!initialScrollRefresh) {
+                AOS.refreshHard();
+                initialScrollRefresh = true;
+            }
+        }, { once: true });
 
         const resizeObserver = new ResizeObserver(() => {
             if (window.AOS) AOS.refreshHard();
