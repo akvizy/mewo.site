@@ -30,6 +30,18 @@
             font-family: 'Inter', sans-serif;
             line-height: 1.5;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        #constellation-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.4;
+            width: 100%;
+            display: block;
         }
 
         ::-webkit-scrollbar { width: 6px; }
@@ -58,10 +70,20 @@
             color: var(--text-main);
         }
 
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
-            margin-left: 40px;
             font-size: 0.85rem;
             font-weight: 500;
             letter-spacing: 1px;
@@ -72,12 +94,51 @@
 
         .nav-links a:hover { color: var(--accent); }
 
+        /* Стиль кнопки переключателя */
+        .toggle-interaction {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            font-size: 0.7rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-interaction:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .toggle-interaction.active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .toggle-interaction .status-dot {
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
         section {
             padding: 140px 8% 80px 8%;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative; 
+            z-index: 1;
         }
 
         .hero { text-align: center; align-items: center; }
@@ -187,7 +248,7 @@
             transition: all 0.3s;
             width: 100%;
             max-width: 250px;
-            margin-top: 10px;
+            margin: 10px auto;
         }
 
         .btn-black:hover {
@@ -201,14 +262,16 @@
             margin: 0 auto;
             width: 100%;
             text-align: center;
+            padding: 0;
         }
 
         .btn-install {
             max-width: 100% !important;
-            margin-top: 0 !important;
+            margin: 0 !important;
             padding: 25px !important;
             font-size: 1.1rem !important;
             border: 1px solid var(--accent);
+            box-sizing: border-box;
         }
 
         .features-grid {
@@ -233,6 +296,9 @@
             display: flex;
             flex-direction: column;
             gap: 40px;
+            position: relative;
+            z-index: 10;
+            background: var(--bg);
         }
 
         .footer-top {
@@ -281,6 +347,7 @@
         @media (max-width: 1024px) {
             .features-grid { flex-wrap: wrap; }
             .f-item { flex: 1 1 250px; }
+            .nav-right { gap: 20px; }
         }
 
         @media (max-width: 768px) {
@@ -295,12 +362,21 @@
 </head>
 <body>
 
+    <canvas id="constellation-canvas"></canvas>
+
     <nav>
         <a href="" class="logo">MEWO</a>
-        <div class="nav-links">
-            <a href="#home" data-lang-en="Home" data-lang-ru="Главная">Home</a>
-            <a href="#versions" data-lang-en="Client" data-lang-ru="Клиент">Client</a>
-            <a onclick="scrollToFooter()" data-lang-en="More" data-lang-ru="Ещё">More</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="#home" data-lang-en="Home" data-lang-ru="Главная">Home</a>
+                <a href="#versions" data-lang-en="Edition" data-lang-ru="Издание">Edition</a>
+                <a onclick="scrollToFooter()" data-lang-en="More" data-lang-ru="Ещё">More</a>
+            </div>
+            <!-- Кнопка отключения магнетизма -->
+            <button id="toggle-magnet" class="toggle-interaction active" title="Включить/Выключить притяжение">
+                <span class="status-dot"></span>
+                <span class="btn-text" data-lang-en="Interactive" data-lang-ru="Интерактив">Interactive</span>
+            </button>
         </div>
     </nav>
 
@@ -317,15 +393,14 @@
         </div>
     </section>
 
-    <section id="versions" style="padding-bottom: 20px;">
+    <section id="versions">
         <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px; text-align: center;" data-aos="fade-up"
-            data-lang-en="Select Edition" data-lang-ru="Выберите версию">Select Edition</h2>
+            data-lang-en="Select Edition" data-lang-ru="Выберите издание">Select Edition</h2>
         <div class="version-grid">
-            
             <div class="version-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="version-header">
-                    <span class="version-name" data-lang-en="Lite" data-lang-ru="Lite">Lite</span>
-                    <span class="v-tag" data-lang-en="Limited edition" data-lang-ru="Ограниченная версия">Limited edition</span>
+                    <span class="version-name">Lite</span>
+                    <span class="v-tag" data-lang-en="Limited edition" data-lang-ru="Ограниченное издание">Limited edition</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.9rem;"
                    data-lang-en="A huge number of features for a convenient and enjoyable game."
@@ -343,7 +418,7 @@
 
             <div class="version-card" data-aos="fade-up" data-aos-delay="300">
                 <div class="version-header">
-                    <span class="version-name" data-lang-en="Full" data-lang-ru="Full">Full</span>
+                    <span class="version-name">Full</span>
                     <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.9rem;"
@@ -358,33 +433,6 @@
                     <li data-lang-en="Physics Engine Tweaks" data-lang-ru="Модули сохранения состояния">Physics Engine Tweaks</li>
                 </ul>
                 <a href="full" class="btn-black" data-lang-en="Purchase Full" data-lang-ru="Приобрести Full">Purchase Full</a>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="download" style="min-height: auto; padding: 0 8% 80px 8%;">
-        <div class="install-container" data-aos="fade-up">
-            <a href="temp" class="btn-black btn-install"
-                data-lang-en="Download MEWO Client (.zip)" data-lang-ru="Скачать MEWO Client (.zip)">Download MEWO Client (.zip)</a>
-        </div>
-    </section>
-
-    <section id="features">
-        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px;" data-aos="fade-right"
-            data-lang-en="Technical Excellence" data-lang-ru="Техническое совершенство">Technical Excellence</h2>
-        <div class="features-grid">
-            <div class="f-item" data-aos="fade-up">
-                <h3 data-lang-en="Low-Level Optimization" data-lang-ru="Низкоуровневая оптимизация">Low-Level Optimization</h3>
-                <p data-lang-en="Engineered in C++ for minimal latency and maximum frame stability." data-lang-ru="Разработано на C++ для минимальной задержки и максимальной стабильности кадров.">Engineered in C++ for minimal latency and maximum frame stability.</p>
-            </div>
-            <div class="f-item" data-aos="fade-up" data-aos-delay="100">
-                <h3 data-lang-en="Clean Architecture" data-lang-ru="Чистая архитектура">Clean Architecture</h3>
-                <p data-lang-en="Intuitive interface that integrates seamlessly with your gameplay." data-lang-ru="Интуитивный интерфейс, который бесшовно интегрируется в ваш игровой процесс.">Intuitive interface that integrates seamlessly with your gameplay.</p>
-            </div>
-            <div class="f-item" data-aos="fade-up" data-aos-delay="200">
-                <h3 data-lang-en="Advanced Security" data-lang-ru="Продвинутая безопасность">Advanced Security</h3>
-                <p data-lang-en="Multi-layered encryption and unique build techniques for protection." data-lang-ru="Многоуровневое шифрование и уникальные методы сборки для защиты.">Multi-layered encryption and unique build techniques for protection.</p>
             </div>
         </div>
     </section>
@@ -415,22 +463,238 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            once: true,
-            offset: 100
+        const canvas = document.getElementById('constellation-canvas');
+        const ctx = canvas.getContext('2d');
+        const footer = document.getElementById('main-footer');
+        const magnetBtn = document.getElementById('toggle-magnet');
+        
+        let particles = [];
+        let isInitialized = false;
+        let isMagnetEnabled = true; // Глобальный флаг притяжения
+
+        // Состояние взаимодействия
+        const mouse = {
+            x: null,
+            y: null,
+            radius: 250,
+            isTouched: false,
+            isDesktop: !('ontouchstart' in window)
+        };
+
+        // Обработка кнопки переключателя
+        magnetBtn.addEventListener('click', () => {
+            isMagnetEnabled = !isMagnetEnabled;
+            if (isMagnetEnabled) {
+                magnetBtn.classList.add('active');
+            } else {
+                magnetBtn.classList.remove('active');
+            }
+        });
+
+        // Мышь (ПК)
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.pageX;
+            mouse.y = e.pageY;
+        });
+
+        // Касания (Телефон)
+        window.addEventListener('touchstart', (e) => {
+            mouse.isTouched = true;
+            if (e.touches.length > 0) {
+                mouse.x = e.touches[0].pageX;
+                mouse.y = e.touches[0].pageY;
+            }
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouse.x = e.touches[0].pageX;
+                mouse.y = e.touches[0].pageY;
+            }
+        });
+        window.addEventListener('touchend', () => mouse.isTouched = false);
+        window.addEventListener('touchcancel', () => mouse.isTouched = false);
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+        
+        function getParticleCount() {
+            const totalHeight = Math.max(document.documentElement.scrollHeight, 1000);
+            return Math.floor((totalHeight / 1000) * 80) + 50;
+        }
+
+        function resizeCanvas() {
+            const footerRect = footer.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const absoluteFooterTop = footerRect.top + scrollTop;
+            
+            canvas.width = window.innerWidth;
+            canvas.height = absoluteFooterTop;
+            canvas.style.height = absoluteFooterTop + 'px';
+
+            particles.forEach(p => {
+                if (p.x > canvas.width) p.x = Math.random() * canvas.width;
+                if (p.y > canvas.height) p.y = Math.random() * canvas.height;
+            });
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * (canvas.width || window.innerWidth);
+                this.y = Math.random() * (canvas.height || document.documentElement.scrollHeight);
+                this.baseVx = (Math.random() - 0.5) * 1.2;
+                this.baseVy = (Math.random() - 0.5) * 1.2;
+                this.vx = this.baseVx;
+                this.vy = this.baseVy;
+                this.radius = 1.8;
+            }
+
+            update() {
+                // ПРОВЕРКА ФЛАГА: Если магнетизм выключен, взаимодействий нет
+                const canInteract = isMagnetEnabled && ((mouse.isDesktop && mouse.x !== null) || (!mouse.isDesktop && mouse.isTouched));
+
+                if (canInteract && mouse.x !== null && mouse.y !== null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        let attraction = mouse.isDesktop ? 0.08 : 0.15;
+                        
+                        this.vx += (dx / distance) * force * attraction;
+                        this.vy += (dy / distance) * force * attraction;
+                    }
+                } else {
+                    // Инерция
+                    this.vx += (this.baseVx - this.vx) * 0.03;
+                    this.vy += (this.baseVy - this.vy) * 0.03;
+                }
+
+                const maxSpeed = mouse.isDesktop ? 3 : 4;
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (speed > maxSpeed) {
+                    this.vx = (this.vx / speed) * maxSpeed;
+                    this.vy = (this.vy / speed) * maxSpeed;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.vx *= -1;
+                    this.baseVx *= -1;
+                }
+                if (this.y < 0 || this.y > canvas.height) {
+                    this.vy *= -1;
+                    this.baseVy *= -1;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            if (isInitialized) return;
+            const count = getParticleCount();
+            particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+            isInitialized = true;
+        }
+
+        function animate() {
+            if (!isInitialized) {
+                requestAnimationFrame(animate);
+                return;
+            }
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const connectionDistance = 180;
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+
+            for (let i = 0; i < particles.length; i++) {
+                const p1 = particles[i];
+
+                if (p1.y < scrollY - 300 || p1.y > scrollY + windowHeight + 300) {
+                    p1.update();
+                    continue; 
+                }
+
+                // Визуальная связь с курсором (только если включено)
+                const isInteracting = isMagnetEnabled && ((mouse.isDesktop && mouse.x !== null) || (!mouse.isDesktop && mouse.isTouched));
+                if (isInteracting && mouse.x !== null && mouse.y !== null) {
+                    let dx = p1.x - mouse.x;
+                    let dy = p1.y - mouse.y;
+                    let distSq = dx * dx + dy * dy;
+                    if (distSq < mouse.radius * mouse.radius) {
+                        let distance = Math.sqrt(distSq);
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 * (1 - distance / mouse.radius)})`;
+                        ctx.lineWidth = 1.0;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distSq = dx * dx + dy * dy;
+
+                    if (distSq < connectionDistance * connectionDistance) {
+                        const distance = Math.sqrt(distSq);
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 * (1 - distance / connectionDistance)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+                p1.update();
+                p1.draw();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('load', () => {
+            AOS.init({ once: true, offset: 100 });
+            setTimeout(() => {
+                resizeCanvas();
+                initParticles();
+            }, 150);
+            animate();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
         });
 
         function scrollToFooter() {
-            document.getElementById('main-footer').scrollIntoView({ behavior: 'smooth' });
+            footer.scrollIntoView({ behavior: 'smooth' });
         }
 
         function setLanguage(lang) {
             const elements = document.querySelectorAll('[data-lang-en]');
             elements.forEach(el => {
                 const translation = el.getAttribute(`data-lang-${lang}`);
-                if (translation) {
-                    el.textContent = translation;
-                }
+                if (translation) el.textContent = translation;
             });
 
             document.querySelectorAll('.lang-btn').forEach(btn => {
