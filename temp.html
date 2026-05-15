@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Development — MEWO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        :root {
+            --bg: #050505;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 40px;
+            left: 8%;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-link:hover { color: #fff; }
+
+        .status-tag {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: var(--text-muted);
+            max-width: 500px;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        /* Symmetric Expand Loader */
+        .loader-container {
+            width: 120px;
+            height: 1px;
+            background: var(--border);
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .loader-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 0;
+            height: 100%;
+            background: var(--accent);
+            transform: translateX(-50%);
+            animation: l6 2s infinite ease-in-out;
+        }
+
+        @keyframes l6 {
+            0%, 100% { width: 0; opacity: 0; }
+            50% { width: 100%; opacity: 1; }
+        }
+
+        /* Donation Button Style */
+        .donate-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            margin-bottom: 60px;
+            background: transparent;
+        }
+
+        .donate-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 15px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.7rem;
+            color: #222;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-link" data-lang-en="← Back" data-lang-ru="← Назад">← Back</a>
+
+    <div class="status-tag" data-lang-en="Work in progress" data-lang-ru="В разработке">Work in progress</div>
+    
+    <h1 data-lang-en="Coming Soon" data-lang-ru="Скоро будет">Coming Soon</h1>
+    
+    <p data-lang-en="We are currently polishing the client to ensure the best possible experience. Stay tuned for updates in our Discord."
+       data-lang-ru="Сейчас мы дорабатываем клиент, чтобы обеспечить наилучший результат. Следите за обновлениями в нашем Discord.">
+        We are currently polishing the client to ensure the best possible experience. Stay tuned for updates in our Discord.
+    </p>
+
+    <div class="loader-container"></div>
+
+    <!-- Кнопка доната -->
+    <a href="https://www.donationalerts.com/r/akvis" target="_blank" rel="noopener noreferrer" class="donate-btn" 
+       data-lang-en="Support Development" data-lang-ru="Поддержать разработку">
+        Support Development
+    </a>
+
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+    </div>
+
+    <footer>MEWO PROJECT 2026</footer>
+
+    <script>
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const translation = el.getAttribute(`data-lang-${lang}`);
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+            });
+        }
+    </script>
+</body>
+</html>
