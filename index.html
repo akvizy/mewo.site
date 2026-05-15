@@ -59,13 +59,12 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 2px; text-decoration: none; color: var(--text-main); }
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 2px; text-decoration: none; color: var(--text-main); cursor: pointer; }
         .nav-right { display: flex; align-items: center; gap: 40px; }
         .nav-links { display: flex; gap: 40px; }
         .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.3s; cursor: pointer; }
         .nav-links a:hover { color: var(--accent); }
 
-        /* Кнопка переключения интерактива */
         .toggle-interaction {
             background: transparent;
             border: 1px solid var(--border);
@@ -85,14 +84,12 @@
             position: relative;
         }
 
-        /* Активное состояние кнопки (черный текст на белом фоне) */
         .toggle-interaction.active { 
             background: var(--accent); 
             color: #000; 
             border-color: var(--accent); 
         }
 
-        /* Эффект наведения (инверсия как у GET STARTED) */
         .toggle-interaction:hover {
             border-color: var(--accent);
             color: var(--accent);
@@ -100,7 +97,6 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
-        /* Если кнопка активна, при наведении она тоже становится прозрачной с белой рамкой */
         .toggle-interaction.active:hover {
             background: transparent;
             color: var(--accent);
@@ -110,7 +106,7 @@
         .toggle-interaction .status-dot { 
             width: 6px; 
             height: 6px; 
-            background: currentColor; /* Точка всегда цвета текста */
+            background: currentColor; 
             border-radius: 50%; 
         }
 
@@ -140,8 +136,7 @@
         .feature-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 15px; }
         .feature-list li::before { content: ""; width: 4px; height: 4px; background: var(--accent); flex-shrink: 0; }
 
-        /* Стандартная черная/белая кнопка (Get Started, Purchase) */
-        .btn-black { display: block; text-align: center; padding: 20px; background: var(--accent); color: #000; text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; width: 100%; max-width: 250px; margin: 10px auto; }
+        .btn-black { display: block; text-align: center; padding: 20px; background: var(--accent); color: #000; text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; width: 100%; max-width: 250px; margin: 10px auto; cursor: pointer; border: none; }
         .btn-black:hover { background: transparent; color: var(--accent); outline: 1px solid var(--accent); }
 
         .install-container { max-width: 1100px; margin: -40px auto 0 auto; width: 100%; text-align: center; }
@@ -172,12 +167,12 @@
     <canvas id="constellation-canvas"></canvas>
 
     <nav>
-        <a href="#" class="logo">MEWO</a>
+        <a onclick="scrollToSection('home')" class="logo">MEWO</a>
         <div class="nav-right">
             <div class="nav-links">
-                <a href="#home" data-lang-en="Home" data-lang-ru="Главная">Home</a>
-                <a href="#versions" data-lang-en="Edition" data-lang-ru="Издание">Edition</a>
-                <a onclick="document.getElementById('main-footer').scrollIntoView()" data-lang-en="More" data-lang-ru="Ещё">More</a>
+                <a onclick="scrollToSection('home')" data-lang-en="Home" data-lang-ru="Главная">Home</a>
+                <a onclick="scrollToSection('versions')" data-lang-en="Edition" data-lang-ru="Издание">Edition</a>
+                <a onclick="scrollToSection('main-footer')" data-lang-en="More" data-lang-ru="Ещё">More</a>
             </div>
             <button id="toggle-magnet" class="toggle-interaction active">
                 <span class="status-dot"></span>
@@ -194,7 +189,7 @@
             Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming.
         </p>
         <div data-aos="fade-up" data-aos-delay="400">
-            <a href="#versions" class="btn-black" data-lang-en="Get Started" data-lang-ru="Начать">Get Started</a>
+            <button onclick="scrollToSection('versions')" class="btn-black" data-lang-en="Get Started" data-lang-ru="Начать">Get Started</button>
         </div>
     </section>
 
@@ -282,6 +277,14 @@
         let particles = [];
         let isMagnetEnabled = true;
         const mouse = { x: null, y: null, radius: 180 };
+
+        // Функция плавной прокрутки без изменения URL
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
 
         magnetBtn.addEventListener('click', () => {
             isMagnetEnabled = !isMagnetEnabled;
