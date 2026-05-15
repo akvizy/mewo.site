@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lite Edition — MEWO</title>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <title>MEWO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         :root {
             --bg: #050505;
@@ -17,101 +17,258 @@
             --text-muted: #888888;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
 
         body {
             background-color: var(--bg);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #constellation-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.4;
+            width: 100%;
+            display: block;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(5, 5, 5, 0.7);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        section {
+            padding: 140px 8% 80px 8%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative; 
+            z-index: 1;
+        }
+
+        .hero { text-align: center; align-items: center; }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 800;
+            letter-spacing: -4px;
+            margin-bottom: 20px;
+            line-height: 0.9;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        .version-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 40px auto 0 auto;
+        }
+
+        .version-card {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            padding: 50px;
+            border-radius: 4px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 40px 20px;
         }
 
-        .back-btn {
-            position: fixed;
-            top: 40px;
-            left: 40px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+        .version-card:hover {
+            background: #0a0a0a;
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-10px);
         }
 
-        .back-btn:hover { color: var(--accent); }
-
-        .header { text-align: center; margin-bottom: 60px; }
-        .header h1 { font-size: 3rem; letter-spacing: -2px; margin-bottom: 10px; }
-        .header p { color: var(--text-muted); font-weight: 300; }
-
-        .price-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
+        .version-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
-        .price-card {
-            background: var(--secondary);
-            border: 1px solid var(--border);
-            padding: 40px 20px;
-            text-align: center;
-            transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .price-card:hover {
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-5px);
-        }
-
-        .duration {
-            font-size: 0.7rem;
+        .version-name {
+            font-size: 1.8rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
+            margin-bottom: 2px;
+        }
+
+        .v-tag {
+            font-size: 0.65rem;
+            padding: 2px 10px;
+            border: 1px solid var(--border);
             color: var(--text-muted);
-            margin-bottom: 20px;
-            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .amount {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            display: block;
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: left;
+            width: fit-content;
         }
 
-        .buy-btn {
+        .feature-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .feature-list li::before {
+            content: "";
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .btn-black {
+            display: block;
+            text-align: center;
+            padding: 20px;
             background: var(--accent);
             color: #000;
             text-decoration: none;
-            padding: 12px 0;
-            display: block;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 250px;
+            margin: 10px auto;
         }
 
-        .buy-btn:hover {
+        .btn-black:hover {
             background: transparent;
             color: var(--accent);
             outline: 1px solid var(--accent);
         }
 
+        .install-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+            padding: 0;
+        }
+
+        .btn-install {
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 25px !important;
+            font-size: 1.1rem !important;
+            border: 1px solid var(--accent);
+            box-sizing: border-box;
+        }
+
+        .features-grid {
+            display: flex; 
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .f-item {
+            flex: 1; 
+            padding: 30px;
+            border-left: 1px solid var(--border);
+        }
+
+        .f-item h3 { font-size: 0.9rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .f-item p { color: var(--text-muted); font-size: 0.85rem; font-weight: 300; }
+
+        footer {
+            padding: 100px 8% 50px 8%;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: relative;
+            z-index: 10;
+            background: var(--bg);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .footer-col h4 { font-size: 0.8rem; text-transform: uppercase; margin-bottom: 20px; color: var(--text-main); }
+        .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; margin-bottom: 10px; transition: 0.3s; }
+        .footer-col a:hover { color: var(--accent); }
+
         .lang-switch {
-            position: fixed;
-            bottom: 40px;
             display: flex;
             gap: 15px;
+            margin-top: 10px;
         }
 
         .lang-btn {
@@ -121,62 +278,367 @@
             padding: 5px 12px;
             font-size: 0.7rem;
             cursor: pointer;
+            text-transform: uppercase;
             transition: 0.3s;
         }
 
-        .lang-btn.active { border-color: var(--accent); color: var(--accent); }
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .features-grid { flex-wrap: wrap; }
+            .f-item { flex: 1 1 250px; }
+        }
 
         @media (max-width: 768px) {
-            .back-btn { top: 20px; left: 20px; }
-            .header h1 { font-size: 2rem; }
-            .price-grid { grid-template-columns: 1fr; }
+            nav { padding: 20px 5%; }
+            .nav-links { display: none; }
+            h1 { font-size: 3.5rem; }
+            .version-grid { grid-template-columns: 1fr; }
+            .features-grid { flex-direction: column; }
+            .f-item { border-left: none; border-top: 1px solid var(--border); padding: 20px 0; }
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn" data-lang-en="← Back" data-lang-ru="← Назад">← Back</a>
+    <canvas id="constellation-canvas"></canvas>
 
-    <div class="header" data-aos="fade-down">
-        <h1 data-lang-en="LITE EDITION" data-lang-ru="LITE EDITION">LITE EDITION</h1>
-        <p data-lang-en="Select your preferred subscription period" data-lang-ru="Выберите подходящий период подписки">Select your preferred subscription period</p>
-    </div>
+    <nav>
+        <a href="" class="logo">MEWO</a>
+        <div class="nav-links">
+            <a href="#home" data-lang-en="Home" data-lang-ru="Главная">Home</a>
+            <a href="#versions" data-lang-en="Edition" data-lang-ru="Издание">Edition</a>
+            <a onclick="scrollToFooter()" data-lang-en="More" data-lang-ru="Ещё">More</a>
+        </div>
+    </nav>
 
-    <div class="price-grid">
-        <div class="price-card" data-aos="fade-up" data-aos-delay="100">
-            <span class="duration" data-lang-en="7 Days" data-lang-ru="7 Дней">7 Days</span>
-            <span class="amount">$1.99</span>
-            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
+    <section id="home" class="hero">
+        <h1 data-aos="fade-up" data-aos-duration="1000">MEWO CLIENT</h1>
+        <p class="hero-desc" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000"
+           data-lang-en="Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming."
+           data-lang-ru="Профессиональная интеграция для DDRaceNetwork. Превосходная производительность, обширный функционал и минималистичный подход к игре.">
+            Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming.
+        </p>
+        <div data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+            <a href="#versions" class="btn-black" style="padding: 20px 60px; display: inline-block;"
+               data-lang-en="Get Started" data-lang-ru="Начать">Get Started</a>
         </div>
-        <div class="price-card" data-aos="fade-up" data-aos-delay="200">
-            <span class="duration" data-lang-en="30 Days" data-lang-ru="30 Дней">30 Days</span>
-            <span class="amount">$3.99</span>
-            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
-        </div>
-        <div class="price-card" data-aos="fade-up" data-aos-delay="300">
-            <span class="duration" data-lang-en="90 Days" data-lang-ru="90 Дней">90 Days</span>
-            <span class="amount">$8.99</span>
-            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
-        </div>
-        <div class="price-card" data-aos="fade-up" data-aos-delay="400">
-            <span class="duration" data-lang-en="Lifetime" data-lang-ru="Навсегда">Lifetime</span>
-            <span class="amount">$24.99</span>
-            <a href="temp" class="buy-btn" data-lang-en="Purchase" data-lang-ru="Купить">Purchase</a>
-        </div>
-    </div>
+    </section>
 
-    <div class="lang-switch">
-        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
-        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
-    </div>
+    <section id="versions">
+        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px; text-align: center;" data-aos="fade-up"
+            data-lang-en="Select Edition" data-lang-ru="Выберите издание">Select Edition</h2>
+        <div class="version-grid">
+            <div class="version-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="version-header">
+                    <span class="version-name">Lite</span>
+                    <span class="v-tag" data-lang-en="Limited edition" data-lang-ru="Ограниченное издание">Limited edition</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"
+                   data-lang-en="A huge number of features for a convenient and enjoyable game."
+                   data-lang-ru="Огромное количество функции для удобной и комфортной игры.">
+                    A huge number of features for a convenient and enjoyable game.
+                </p>
+                <ul class="feature-list">
+                    <li data-lang-en="Many features" data-lang-ru="Множество функции">Many features</li>
+                    <li data-lang-en="Convenient and flexible HUD customization" data-lang-ru="Удобная и гибкая настройка HUD">Convenient and flexible HUD customization</li>
+                    <li data-lang-en="Visual improvements for DDRace" data-lang-ru="Визуальные улучшения DDRace">Visual improvements for DDRace</li>
+                    <li data-lang-en="Improved optimization" data-lang-ru="Улучшенная оптимизация">Improved optimization</li>
+                </ul>
+                <a href="lite" class="btn-black" data-lang-en="Purchase Lite" data-lang-ru="Приобрести Lite">Purchase Lite</a>
+            </div>
+
+            <div class="version-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="version-header">
+                    <span class="version-name">Full</span>
+                    <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"
+                   data-lang-en="Maximum control over game mechanics. Every tool required for technical dominance."
+                   data-lang-ru="Максимальный контроль над игровой механикой. Все инструменты для технического доминирования.">
+                    Maximum control over game mechanics. Every tool required for technical dominance.
+                </p>
+                <ul class="feature-list">
+                    <li data-lang-en="Even more features" data-lang-ru="Ещё больше функции">Even more features</li>
+                    <li data-lang-en="Latency Compensation" data-lang-ru="Компенсация задержки">Latency Compensation</li>
+                    <li data-lang-en="State Persistence Modules" data-lang-ru="Настройки физического движка">State Persistence Modules</li>
+                    <li data-lang-en="Physics Engine Tweaks" data-lang-ru="Модули сохранения состояния">Physics Engine Tweaks</li>
+                </ul>
+                <a href="full" class="btn-black" data-lang-en="Purchase Full" data-lang-ru="Приобрести Full">Purchase Full</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" style="min-height: auto; padding: 0 8% 80px 8%;">
+        <div class="install-container" data-aos="fade-up">
+            <a href="temp" class="btn-black btn-install"
+                data-lang-en="Download MEWO Client (.zip)" data-lang-ru="Скачать MEWO Client (.zip)">Download MEWO Client (.zip)</a>
+        </div>
+    </section>
+
+    <section id="features">
+        <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px;" data-aos="fade-right"
+            data-lang-en="Technical Excellence" data-lang-ru="Техническое совершенство">Technical Excellence</h2>
+        <div class="features-grid">
+            <div class="f-item" data-aos="fade-up">
+                <h3 data-lang-en="Low-Level Optimization" data-lang-ru="Низкоуровневая оптимизация">Low-Level Optimization</h3>
+                <p data-lang-en="Engineered in C++ for minimal latency and maximum frame stability." data-lang-ru="Разработано на C++ для минимальной задержки и максимальной стабильности кадров.">Engineered in C++ for minimal latency and maximum frame stability.</p>
+            </div>
+            <div class="f-item" data-aos="fade-up" data-aos-delay="100">
+                <h3 data-lang-en="Clean Architecture" data-lang-ru="Чистая архитектура">Clean Architecture</h3>
+                <p data-lang-en="Intuitive interface that integrates seamlessly with your gameplay." data-lang-ru="Интуитивный интерфейс, который бесшовно интегрируется в ваш игровой процесс.">Intuitive interface that integrates seamlessly with your gameplay.</p>
+            </div>
+            <div class="f-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 data-lang-en="Advanced Security" data-lang-ru="Продвинутая безопасность">Advanced Security</h3>
+                <p data-lang-en="Multi-layered encryption and unique build techniques for protection." data-lang-ru="Многоуровневое шифрование и уникальные методы сборки для защиты.">Advanced Security</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="main-footer">
+        <div class="footer-top">
+            <div class="footer-col">
+                <h4 data-lang-en="Legal" data-lang-ru="Юридическая информация">Legal</h4>
+                <a href="tos" data-lang-en="Terms of Service" data-lang-ru="Условия использования">Terms of Service</a>
+                <a href="privacy" data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности">Privacy Policy</a>
+                <div class="lang-switch">
+                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4 data-lang-en="Community" data-lang-ru="Сообщество">Community</h4>
+                <a href="https://discord.gg/y8B8TE2gx7" target="_blank" data-lang-en="Discord Server" data-lang-ru="Дискорд сервер">Discord Server</a>
+                <a href="" data-lang-en="GitHub Repositories" data-lang-ru="Репозиторий GitHub">GitHub Repositories</a>
+                <a href="https://www.youtube.com/channel/UCmu_mEJv8jmadc2OxUCkScw" target="_blank" rel="noopener noreferrer" data-lang-en="YouTube" data-lang-ru="Ютуб">YouTube</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span data-lang-en="&copy; 2026 MEWO PROJECT. ALL RIGHTS RESERVED" data-lang-ru="&copy; 2026 ПРОЕКТ MEWO. ВСЕ ПРАВА ЗАЩИЩЕНЫ">&copy; 2026 MEWO PROJECT. ALL RIGHTS RESERVED</span>
+            <span data-lang-en="NOT AFFILIATED WITH DDRACENETWORK" data-lang-ru="НЕ СВЯЗАНО С DDRACENETWORK">NOT AFFILIATED WITH DDRACENETWORK</span>
+        </div>
+    </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ once: true });
-        function setLanguage(lang) {
-            document.querySelectorAll('[data-lang-en]').forEach(el => {
-                el.textContent = el.getAttribute(`data-lang-${lang}`);
+        const canvas = document.getElementById('constellation-canvas');
+        const ctx = canvas.getContext('2d');
+        const footer = document.getElementById('main-footer');
+        let particles = [];
+        let isInitialized = false;
+
+        // Объект мыши для интерактивности
+        const mouse = {
+            x: null,
+            y: null,
+            radius: 200 // Радиус влияния курсора
+        };
+
+        // Отслеживание мыши
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.pageX;
+            mouse.y = e.pageY;
+        });
+
+        // Сброс позиции мыши при уходе курсора
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+        
+        function getParticleCount() {
+            const totalHeight = Math.max(document.documentElement.scrollHeight, 1000);
+            return Math.floor((totalHeight / 1000) * 80) + 50;
+        }
+
+        function resizeCanvas() {
+            const footerRect = footer.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const absoluteFooterTop = footerRect.top + scrollTop;
+            
+            canvas.width = window.innerWidth;
+            canvas.height = absoluteFooterTop;
+            canvas.style.height = absoluteFooterTop + 'px';
+
+            particles.forEach(p => {
+                if (p.x > canvas.width) p.x = Math.random() * canvas.width;
+                if (p.y > canvas.height) p.y = Math.random() * canvas.height;
             });
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * (canvas.width || window.innerWidth);
+                this.y = Math.random() * (canvas.height || document.documentElement.scrollHeight);
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.radius = 1.8;
+                this.connections = 0;
+            }
+
+            update() {
+                // Притяжение к мыши
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        // Плавное притяжение
+                        let forceDirectionX = dx / distance;
+                        let forceDirectionY = dy / distance;
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        
+                        this.vx += forceDirectionX * force * 0.1;
+                        this.vy += forceDirectionY * force * 0.1;
+                    }
+                }
+
+                // Ограничение скорости
+                const maxSpeed = 2;
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (speed > maxSpeed) {
+                    this.vx = (this.vx / speed) * maxSpeed;
+                    this.vy = (this.vy / speed) * maxSpeed;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+                if (this.connections === 0) {
+                    this.vx += (Math.random() - 0.5) * 0.05;
+                    this.vy += (Math.random() - 0.5) * 0.05;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            if (isInitialized) return;
+            const count = getParticleCount();
+            particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+            isInitialized = true;
+        }
+
+        function animate() {
+            if (!isInitialized) {
+                requestAnimationFrame(animate);
+                return;
+            }
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const connectionDistance = 180;
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].connections = 0;
+            }
+
+            for (let i = 0; i < particles.length; i++) {
+                const p1 = particles[i];
+
+                if (p1.y < scrollY - 300 || p1.y > scrollY + windowHeight + 300) {
+                    p1.update();
+                    continue; 
+                }
+
+                // Рисуем связь с курсором
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = p1.x - mouse.x;
+                    let dy = p1.y - mouse.y;
+                    let distSq = dx * dx + dy * dy;
+                    if (distSq < mouse.radius * mouse.radius) {
+                        let distance = Math.sqrt(distSq);
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - distance / mouse.radius)})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                        p1.connections++;
+                    }
+                }
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distSq = dx * dx + dy * dy;
+
+                    if (distSq < connectionDistance * connectionDistance) {
+                        const distance = Math.sqrt(distSq);
+                        p1.connections++;
+                        p2.connections++;
+                        
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 * (1 - distance / connectionDistance)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+                p1.update();
+                p1.draw();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('load', () => {
+            AOS.init({ once: true, offset: 100 });
+            setTimeout(() => {
+                resizeCanvas();
+                initParticles();
+            }, 100);
+            animate();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        function scrollToFooter() {
+            footer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const translation = el.getAttribute(`data-lang-${lang}`);
+                if (translation) el.textContent = translation;
+            });
+
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
