@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MEWO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -22,6 +22,7 @@
             padding: 0;
             box-sizing: border-box;
             scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -39,7 +40,7 @@
             left: 0;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.5;
             width: 100%;
             display: block;
         }
@@ -160,7 +161,7 @@
 
         .version-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
             width: 100%;
             max-width: 1100px;
@@ -328,10 +329,13 @@
         }
 
         @media (max-width: 768px) {
-            nav { padding: 20px 5%; }
+            nav { padding: 15px 5%; }
             .nav-links { display: none; }
-            h1 { font-size: 3.5rem; }
+            h1 { font-size: 3.2rem; letter-spacing: -2px; }
             .version-grid { grid-template-columns: 1fr; }
+            .version-card { padding: 40px 25px; }
+            section { padding: 100px 5% 60px 5%; }
+            .toggle-interaction { padding: 6px 12px; font-size: 0.65rem; }
         }
     </style>
 </head>
@@ -411,9 +415,10 @@
         </div>
     </section>
 
+    <!-- Секция скачивания -->
     <section id="download" style="min-height: auto; padding: 0 8% 140px 8%;">
         <div class="install-container" data-aos="fade-up">
-            <a href="temp" class="btn-black btn-install"
+            <a href="mewo_launcher.zip" class="btn-black btn-install"
                 data-lang-en="DOWNLOAD MEWO LAUNCHER" data-lang-ru="СКАЧАТЬ MEWO LAUNCHER">DOWNLOAD MEWO LAUNCHER</a>
         </div>
     </section>
@@ -456,63 +461,59 @@
         const mouse = {
             x: null,
             y: null,
-            radius: 250,
+            radius: 200, // Уменьшен радиус для мобильных
             isTouched: false,
             isDesktop: !('ontouchstart' in window)
         };
 
         magnetBtn.addEventListener('click', () => {
             isMagnetEnabled = !isMagnetEnabled;
-            if (isMagnetEnabled) {
-                magnetBtn.classList.add('active');
-            } else {
-                magnetBtn.classList.remove('active');
-            }
+            magnetBtn.classList.toggle('active', isMagnetEnabled);
         });
 
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.pageX;
-            mouse.y = e.pageY;
-        });
+        const updateMousePos = (e) => {
+            const pageX = e.pageX || (e.touches ? e.touches[0].pageX : 0);
+            const pageY = e.pageY || (e.touches ? e.touches[0].pageY : 0);
+            mouse.x = pageX;
+            mouse.y = pageY;
+        };
 
+        window.addEventListener('mousemove', updateMousePos);
         window.addEventListener('touchstart', (e) => {
             mouse.isTouched = true;
-            if (e.touches.length > 0) {
-                mouse.x = e.touches[0].pageX;
-                mouse.y = e.touches[0].pageY;
-            }
-        });
-        window.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                mouse.x = e.touches[0].pageX;
-                mouse.y = e.touches[0].pageY;
-            }
-        });
+            updateMousePos(e);
+        }, {passive: false});
+        window.addEventListener('touchmove', updateMousePos, {passive: false});
         window.addEventListener('touchend', () => mouse.isTouched = false);
-        window.addEventListener('touchcancel', () => mouse.isTouched = false);
 
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-        
         function getParticleCount() {
-            const totalHeight = Math.max(document.documentElement.scrollHeight, 1000);
-            return Math.floor((totalHeight / 1000) * 80) + 50;
+            const screenArea = window.innerWidth * window.innerHeight;
+            const density = mouse.isDesktop ? 0.00008 : 0.00005;
+            const baseCount = Math.floor(screenArea * density);
+            const totalHeight = document.documentElement.scrollHeight;
+            return Math.min(baseCount * (totalHeight / window.innerHeight), 250);
         }
 
         function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
             const footerRect = footer.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const absoluteFooterTop = footerRect.top + scrollTop;
             
-            canvas.width = window.innerWidth;
-            canvas.height = absoluteFooterTop;
-            canvas.style.height = absoluteFooterTop + 'px';
+            const displayWidth = window.innerWidth;
+            const displayHeight = absoluteFooterTop;
+
+            // Масштабируем холст под DPR (Fix для четкости)
+            canvas.width = displayWidth * dpr;
+            canvas.height = displayHeight * dpr;
+            canvas.style.width = displayWidth + 'px';
+            canvas.style.height = displayHeight + 'px';
+            
+            ctx.scale(dpr, dpr);
 
             particles.forEach(p => {
-                if (p.x > canvas.width) p.x = Math.random() * canvas.width;
-                if (p.y > canvas.height) p.y = Math.random() * canvas.height;
+                if (p.x > displayWidth) p.x = Math.random() * displayWidth;
+                if (p.y > displayHeight) p.y = Math.random() * displayHeight;
             });
         }
 
@@ -522,13 +523,13 @@
             }
 
             reset() {
-                this.x = Math.random() * (canvas.width || window.innerWidth);
-                this.y = Math.random() * (canvas.height || document.documentElement.scrollHeight);
-                this.baseVx = (Math.random() - 0.5) * 1.2;
-                this.baseVy = (Math.random() - 0.5) * 1.2;
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * document.documentElement.scrollHeight;
+                this.baseVx = (Math.random() - 0.5) * 0.8;
+                this.baseVy = (Math.random() - 0.5) * 0.8;
                 this.vx = this.baseVx;
                 this.vy = this.baseVy;
-                this.radius = 1.8;
+                this.radius = mouse.isDesktop ? 1.5 : 1.2;
             }
 
             update() {
@@ -541,40 +542,28 @@
                     
                     if (distance < mouse.radius) {
                         let force = (mouse.radius - distance) / mouse.radius;
-                        let attraction = mouse.isDesktop ? 0.08 : 0.15;
-                        
+                        let attraction = mouse.isDesktop ? 0.05 : 0.08;
                         this.vx += (dx / distance) * force * attraction;
                         this.vy += (dy / distance) * force * attraction;
                     }
-                } else {
-                    this.vx += (this.baseVx - this.vx) * 0.03;
-                    this.vy += (this.baseVy - this.vy) * 0.03;
                 }
 
-                const maxSpeed = mouse.isDesktop ? 3 : 4;
-                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                if (speed > maxSpeed) {
-                    this.vx = (this.vx / speed) * maxSpeed;
-                    this.vy = (this.vy / speed) * maxSpeed;
-                }
+                this.vx += (this.baseVx - this.vx) * 0.02;
+                this.vy += (this.baseVy - this.vy) * 0.02;
 
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width) {
-                    this.vx *= -1;
-                    this.baseVx *= -1;
-                }
-                if (this.y < 0 || this.y > canvas.height) {
-                    this.vy *= -1;
-                    this.baseVy *= -1;
-                }
+                if (this.x < 0) this.x = window.innerWidth;
+                if (this.x > window.innerWidth) this.x = 0;
+                if (this.y < 0) this.y = canvas.height / (window.devicePixelRatio || 1);
+                if (this.y > canvas.height / (window.devicePixelRatio || 1)) this.y = 0;
             }
 
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                 ctx.fill();
             }
         }
@@ -582,46 +571,24 @@
         function initParticles() {
             if (isInitialized) return;
             const count = getParticleCount();
-            particles = [];
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle());
-            }
+            particles = Array.from({length: count}, () => new Particle());
             isInitialized = true;
         }
 
         function animate() {
-            if (!isInitialized) {
-                requestAnimationFrame(animate);
-                return;
-            }
-            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const connectionDistance = 180;
+            
+            const connectionDistance = mouse.isDesktop ? 150 : 100;
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
+            const dpr = window.devicePixelRatio || 1;
 
             for (let i = 0; i < particles.length; i++) {
                 const p1 = particles[i];
 
-                if (p1.y < scrollY - 300 || p1.y > scrollY + windowHeight + 300) {
+                if (p1.y < scrollY - 200 || p1.y > scrollY + windowHeight + 200) {
                     p1.update();
                     continue; 
-                }
-
-                const isInteracting = isMagnetEnabled && ((mouse.isDesktop && mouse.x !== null) || (!mouse.isDesktop && mouse.isTouched));
-                if (isInteracting && mouse.x !== null && mouse.y !== null) {
-                    let dx = p1.x - mouse.x;
-                    let dy = p1.y - mouse.y;
-                    let distSq = dx * dx + dy * dy;
-                    if (distSq < mouse.radius * mouse.radius) {
-                        let distance = Math.sqrt(distSq);
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 * (1 - distance / mouse.radius)})`;
-                        ctx.lineWidth = 1.0;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
-                    }
                 }
 
                 for (let j = i + 1; j < particles.length; j++) {
@@ -633,8 +600,8 @@
                     if (distSq < connectionDistance * connectionDistance) {
                         const distance = Math.sqrt(distSq);
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 * (1 - distance / connectionDistance)})`;
-                        ctx.lineWidth = 0.8;
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - distance / connectionDistance)})`;
+                        ctx.lineWidth = 0.5;
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
@@ -643,21 +610,20 @@
                 p1.update();
                 p1.draw();
             }
-
             requestAnimationFrame(animate);
         }
 
         window.addEventListener('load', () => {
-            AOS.init({ once: true, offset: 100 });
-            setTimeout(() => {
-                resizeCanvas();
-                initParticles();
-            }, 150);
+            AOS.init({ once: true, offset: 50 });
+            resizeCanvas();
+            initParticles();
             animate();
         });
 
+        let resizeTimer;
         window.addEventListener('resize', () => {
-            resizeCanvas();
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(resizeCanvas, 200);
         });
 
         function scrollToFooter() {
@@ -665,15 +631,12 @@
         }
 
         function setLanguage(lang) {
-            const elements = document.querySelectorAll('[data-lang-en]');
-            elements.forEach(el => {
+            document.querySelectorAll('[data-lang-en]').forEach(el => {
                 const translation = el.getAttribute(`data-lang-${lang}`);
                 if (translation) el.textContent = translation;
             });
-
             document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
             });
         }
     </script>
