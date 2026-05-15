@@ -295,8 +295,6 @@
             const currentWidth = window.innerWidth;
             const fullHeight = document.body.getBoundingClientRect().height;
 
-            // На телефонах высота меняется при появлении адресной строки.
-            // Пересоздаем частицы только если ширина изменилась значительно (поворот экрана).
             const widthChanged = Math.abs(currentWidth - lastWidth) > 50;
 
             canvas.width = currentWidth * dpr;
@@ -314,7 +312,6 @@
                 lastWidth = currentWidth;
                 init(fullHeight);
             } else {
-                // Если ширина не менялась, просто обновляем лимит высоты для существующих частиц
                 particles.forEach(p => p.canvasHeight = fullHeight);
             }
             
@@ -391,7 +388,6 @@
                 const p1 = particles[i];
                 p1.update();
                 
-                // Оптимизация: рисуем только то, что близко к области видимости
                 if (p1.y < scrollY - margin || p1.y > scrollY + viewportHeight + margin) continue;
                 p1.draw();
 
@@ -431,7 +427,6 @@
             window.resizeTimeout = setTimeout(resize, 150);
         });
 
-        // Блокируем сброс частиц при малых изменениях высоты (скролл на мобильных)
         resize();
         animate();
 
