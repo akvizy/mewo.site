@@ -257,7 +257,7 @@
             <div class="footer-col">
                 <h4 data-lang-en="Community" data-lang-ru="Сообщество">Community</h4>
                 <a href="https://discord.gg/y8B8TE2gx7" target="_blank">Discord</a>
-                <a href="#">GitHub</a>
+                <a href="temp">GitHub</a>
                 <a href="https://www.youtube.com/channel/UCmu_mEJv8jmadc2OxUCkScw" target="_blank">YouTube</a>
             </div>
         </div>
@@ -274,7 +274,6 @@
         const magnetBtn = document.getElementById('toggle-magnet');
         
         let particles = [];
-        // Флаг теперь четко привязан к наличию класса active в HTML
         let isMagnetEnabled = magnetBtn.classList.contains('active'); 
         const mouse = { x: null, y: null, radius: 180 };
 
@@ -309,15 +308,17 @@
             canvas.style.height = fullHeight + 'px';
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             
-            // На мобилках всегда выключаем
             if (window.innerWidth <= 768) {
                 isMagnetEnabled = false;
                 magnetBtn.classList.remove('active');
             } else {
-                // На десктопе возвращаем состояние из текущего класса кнопки
                 isMagnetEnabled = magnetBtn.classList.contains('active');
             }
-            
+
+            if (window.AOS) {
+                AOS.refresh();
+            }
+
             init(fullHeight);
         }
 
@@ -430,11 +431,24 @@
             window.resizeTimeout = setTimeout(resize, 100);
         });
 
+        window.addEventListener('orientationchange', () => {
+            setTimeout(resize, 300);
+        });
+
         window.addEventListener('load', () => {
-            AOS.init({ duration: 800, once: true });
+            AOS.init({ 
+                duration: 800, 
+                once: true,
+                startEvent: 'DOMContentLoaded'
+            });
             resize();
             animate();
         });
+
+        const resizeObserver = new ResizeObserver(() => {
+            if (window.AOS) AOS.refresh();
+        });
+        resizeObserver.observe(document.body);
     </script>
 </body>
 </html>
