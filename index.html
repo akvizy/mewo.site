@@ -17,6 +17,51 @@
             --text-muted: #888888;
         }
 
+        /* Полное отключение системного скроллбара */
+        html, body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        ::-webkit-scrollbar {
+            display: none !important;
+        }
+
+        /* Контейнер кастомного скроллбара */
+        #custom-scrollbar {
+            position: fixed;
+            right: 2px;
+            top: 0;
+            width: 10px;
+            height: 100vh;
+            z-index: 9999;
+            background: transparent;
+            pointer-events: auto;
+        }
+
+        #scroll-thumb {
+            position: absolute;
+            width: 6px;
+            right: 1px;
+            background: #222;
+            border-radius: 10px;
+            transition: background 0.3s, width 0.2s;
+            cursor: default;
+            pointer-events: auto;
+        }
+
+        #scroll-thumb:hover, #scroll-thumb.dragging {
+            background: #666;
+            width: 8px;
+        }
+        
+        body.is-dragging-scroll {
+            cursor: default !important;
+        }
+        body.is-dragging-scroll * {
+            cursor: default !important;
+            user-select: none !important;
+        }
+
         [data-aos] {
             transition-property: transform, opacity;
         }
@@ -25,8 +70,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        html.no-smooth {
+            scroll-behavior: auto !important;
         }
 
         body {
@@ -44,7 +96,7 @@
             left: 0;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.5;
+            opacity: 0.6; /* Немного повышена общая видимость */
             display: block;
         }
 
@@ -150,22 +202,27 @@
             .toggle-interaction { display: none; }
             .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
             .install-container { margin-top: 0; }
+            #custom-scrollbar { display: none; }
         }
     </style>
 </head>
 <body>
 
+    <div id="custom-scrollbar">
+        <div id="scroll-thumb"></div>
+    </div>
+
     <canvas id="constellation-canvas"></canvas>
 
-    <nav>
-        <a onclick="scrollToSection('home')" class="logo">MEWO</a>
+    <nav class="js-ui-zone">
+        <a onclick="scrollToSection('home')" class="logo js-ui-zone">MEWO</a>
         <div class="nav-right">
             <div class="nav-links">
-                <a onclick="scrollToSection('home')" data-lang-en="Home" data-lang-ru="Главная">Home</a>
-                <a onclick="scrollToSection('versions')" data-lang-en="Edition" data-lang-ru="Издание">Edition</a>
-                <a onclick="scrollToSection('main-footer')" data-lang-en="More" data-lang-ru="Ещё">More</a>
+                <a onclick="scrollToSection('home')" data-lang-en="Home" data-lang-ru="Главная" class="js-ui-zone">Home</a>
+                <a onclick="scrollToSection('versions')" data-lang-en="Edition" data-lang-ru="Издание" class="js-ui-zone">Edition</a>
+                <a onclick="scrollToSection('main-footer')" data-lang-en="More" data-lang-ru="Ещё" class="js-ui-zone">More</a>
             </div>
-            <button id="toggle-magnet" class="toggle-interaction active">
+            <button id="toggle-magnet" class="toggle-interaction active js-ui-zone">
                 <span class="status-dot"></span>
                 <span data-lang-en="Interactive" data-lang-ru="Интерактив">Interactive</span>
             </button>
@@ -180,7 +237,7 @@
             Professional integration for DDRaceNetwork. Superior performance, extensive functionality, and a minimalist approach to gaming.
         </p>
         <div data-aos="fade-up" data-aos-delay="200">
-            <button onclick="scrollToSection('versions')" class="btn-black" data-lang-en="Get Started" data-lang-ru="Начать">Get Started</button>
+            <button onclick="scrollToSection('versions')" class="btn-black js-ui-zone" data-lang-en="Get Started" data-lang-ru="Начать">Get Started</button>
         </div>
     </section>
 
@@ -188,7 +245,7 @@
         <h2 style="font-size: 2rem; margin-bottom: 60px; letter-spacing: -1px; text-align: center;" data-aos="fade-up"
             data-lang-en="Select Edition" data-lang-ru="Выберите издание">Select Edition</h2>
         <div class="version-grid">
-            <div class="version-card" data-aos="fade-up">
+            <div class="version-card js-ui-zone" data-aos="fade-up">
                 <div class="version-header">
                     <span class="version-name">Lite</span>
                     <span class="v-tag" data-lang-en="Limited edition" data-lang-ru="Ограниченное издание">Limited edition</span>
@@ -204,10 +261,10 @@
                     <li data-lang-en="Visual improvements for DDRace" data-lang-ru="Визуальные улучшения DDRace">Visual improvements for DDRace</li>
                     <li data-lang-en="Improved optimization" data-lang-ru="Улучшенная оптимизация">Improved optimization</li>
                 </ul>
-                <a href="lite" class="btn-black" data-lang-en="Purchase Lite" data-lang-ru="Приобрести Lite">Purchase Lite</a>
+                <a href="lite" class="btn-black js-ui-zone" data-lang-en="Purchase Lite" data-lang-ru="Приобрести Lite">Purchase Lite</a>
             </div>
 
-            <div class="version-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="version-card js-ui-zone" data-aos="fade-up" data-aos-delay="100">
                 <div class="version-header">
                     <span class="version-name">Full</span>
                     <span class="v-tag" data-lang-en="Unrestricted" data-lang-ru="Без ограничений">Unrestricted</span>
@@ -223,34 +280,34 @@
                     <li data-lang-en="State Persistence Modules" data-lang-ru="Настройки физического движка">State Persistence Modules</li>
                     <li data-lang-en="Physics Engine Tweaks" data-lang-ru="Модули сохранения состояния">Physics Engine Tweaks</li>
                 </ul>
-                <a href="full" class="btn-black" data-lang-en="Purchase Full" data-lang-ru="Приобрести Full">Purchase Full</a>
+                <a href="full" class="btn-black js-ui-zone" data-lang-en="Purchase Full" data-lang-ru="Приобрести Full">Purchase Full</a>
             </div>
         </div>
     </section>
 
     <section id="download" style="min-height: auto; padding: 0 8% 140px 8%;">
         <div class="install-container" data-aos="fade-up">
-            <a href="temp" class="btn-black btn-install"
+            <a href="temp" class="btn-black btn-install js-ui-zone"
                 data-lang-en="DOWNLOAD MEWO LAUNCHER" data-lang-ru="СКАЧАТЬ MEWO LAUNCHER">DOWNLOAD MEWO LAUNCHER</a>
         </div>
     </section>
 
-    <footer id="main-footer">
+    <footer id="main-footer" class="js-ui-zone">
         <div class="footer-top">
             <div class="footer-col">
                 <h4 data-lang-en="Legal" data-lang-ru="Юридическая информация">Legal</h4>
-                <a href="tos" data-lang-en="Terms of Service" data-lang-ru="Условия использования">Terms of Service</a>
-                <a href="privacy" data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности">Privacy Policy</a>
+                <a href="tos" data-lang-en="Terms of Service" data-lang-ru="Условия использования" class="js-ui-zone">Terms of Service</a>
+                <a href="privacy" data-lang-en="Privacy Policy" data-lang-ru="Политика конфиденциальности" class="js-ui-zone">Privacy Policy</a>
                 <div class="lang-switch">
-                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
-                    <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+                    <button class="lang-btn active js-ui-zone" onclick="setLanguage('en')">EN</button>
+                    <button class="lang-btn js-ui-zone" onclick="setLanguage('ru')">RU</button>
                 </div>
             </div>
             <div class="footer-col">
                 <h4 data-lang-en="Community" data-lang-ru="Сообщество">Community</h4>
-                <a href="https://discord.gg/y8B8TE2gx7" target="_blank">Discord</a>
-                <a href="temp">GitHub</a>
-                <a href="https://www.youtube.com/channel/UCmu_mEJv8jmadc2OxUCkScw" target="_blank">YouTube</a>
+                <a href="https://discord.gg/y8B8TE2gx7" target="_blank" class="js-ui-zone">Discord</a>
+                <a href="temp" class="js-ui-zone">GitHub</a>
+                <a href="https://www.youtube.com/channel/UCmu_mEJv8jmadc2OxUCkScw" target="_blank" class="js-ui-zone">YouTube</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -264,12 +321,94 @@
         const canvas = document.getElementById('constellation-canvas');
         const ctx = canvas.getContext('2d', { alpha: true });
         const magnetBtn = document.getElementById('toggle-magnet');
-        
+        const scrollThumb = document.getElementById('scroll-thumb');
+        const scrollContainer = document.getElementById('custom-scrollbar');
+        const html = document.documentElement;
+        const body = document.body;
+
         let particles = [];
         let isMagnetEnabled = magnetBtn.classList.contains('active'); 
-        const mouse = { x: null, y: null, radius: 180 };
+        let isHoveringUI = false;
+        const mouse = { x: null, y: null, radius: 200 }; // Увеличен радиус для заметности
         let lastWidth = window.innerWidth;
 
+        // Логика обнаружения курсора над интерфейсными элементами
+        document.addEventListener('mouseover', (e) => {
+            isHoveringUI = !!e.target.closest('.js-ui-zone');
+        });
+
+        // --- СКРОЛЛБАР ---
+        let isDragging = false;
+        let startY = 0;
+        let startScrollTop = 0;
+
+        function updateScrollThumb() {
+            if (isDragging) return;
+            const scrollHeight = html.scrollHeight;
+            const clientHeight = window.innerHeight;
+            const scrollTop = window.scrollY;
+            const scrollPercent = scrollTop / (scrollHeight - clientHeight);
+            const thumbHeight = Math.max((clientHeight / scrollHeight) * clientHeight, 40);
+            scrollThumb.style.height = `${thumbHeight}px`;
+            const availableSpace = clientHeight - thumbHeight;
+            scrollThumb.style.top = `${scrollPercent * availableSpace}px`;
+        }
+
+        scrollThumb.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startY = e.clientY;
+            startScrollTop = window.scrollY;
+            
+            html.classList.add('no-smooth');
+            body.classList.add('is-dragging-scroll');
+            scrollThumb.classList.add('dragging');
+            
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const clientHeight = window.innerHeight;
+            const scrollHeight = html.scrollHeight;
+            const thumbHeight = parseFloat(scrollThumb.style.height);
+            const availableSpace = clientHeight - thumbHeight;
+            const deltaY = e.clientY - startY;
+            const movePercent = deltaY / availableSpace;
+            const totalScrollable = scrollHeight - clientHeight;
+            const newScrollTop = startScrollTop + (movePercent * totalScrollable);
+            window.scrollTo(0, newScrollTop);
+            const currentScrollPercent = window.scrollY / totalScrollable;
+            scrollThumb.style.top = `${currentScrollPercent * availableSpace}px`;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                html.classList.remove('no-smooth');
+                body.classList.remove('is-dragging-scroll');
+                scrollThumb.classList.remove('dragging');
+            }
+        });
+
+        scrollContainer.addEventListener('mousedown', (e) => {
+            if (e.target === scrollContainer) {
+                const clientHeight = window.innerHeight;
+                const scrollHeight = html.scrollHeight;
+                const thumbHeight = parseFloat(scrollThumb.style.height);
+                const clickY = e.clientY;
+                const targetPercent = (clickY - thumbHeight / 2) / (clientHeight - thumbHeight);
+                window.scrollTo({
+                    top: targetPercent * (scrollHeight - clientHeight),
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        window.addEventListener('scroll', updateScrollThumb, { passive: true });
+        window.addEventListener('load', updateScrollThumb);
+
+        // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
         function scrollToSection(id) {
             const element = document.getElementById(id);
             if (element) element.scrollIntoView({ behavior: 'smooth' });
@@ -281,6 +420,7 @@
         });
 
         window.addEventListener('mousemove', (e) => {
+            if (isDragging) return; 
             mouse.x = e.pageX;
             mouse.y = e.pageY;
         });
@@ -293,8 +433,7 @@
         function resize() {
             const dpr = window.devicePixelRatio || 1;
             const currentWidth = window.innerWidth;
-            const fullHeight = document.body.getBoundingClientRect().height;
-
+            const fullHeight = body.getBoundingClientRect().height;
             const widthChanged = Math.abs(currentWidth - lastWidth) > 50;
 
             canvas.width = currentWidth * dpr;
@@ -314,8 +453,8 @@
             } else {
                 particles.forEach(p => p.canvasHeight = fullHeight);
             }
-            
             if (window.AOS) AOS.refresh();
+            updateScrollThumb();
         }
 
         class Particle {
@@ -325,39 +464,42 @@
                 this.y = Math.random() * this.canvasHeight;
                 this.vx = (Math.random() - 0.5) * 0.8;
                 this.vy = (Math.random() - 0.5) * 0.8;
-                this.size = 1.2;
-                this.minSpeed = 0.2;
+                this.size = 1.3;
+                this.minSpeed = 0.25;
             }
-
             update() {
-                if (isMagnetEnabled && mouse.x !== null) {
+                // Магнетизм работает только если включен и курсор НЕ над элементами UI
+                if (isMagnetEnabled && mouse.x !== null && !isHoveringUI) {
                     const dx = mouse.x - this.x;
                     const dy = mouse.y - this.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < mouse.radius) {
                         const force = (mouse.radius - distance) / mouse.radius;
-                        this.vx += (dx / distance) * force * 0.04;
-                        this.vy += (dy / distance) * force * 0.04;
+                        this.vx += (dx / distance) * force * 0.05;
+                        this.vy += (dy / distance) * force * 0.05;
                     }
                 }
-                this.vx *= 0.995;
-                this.vy *= 0.995;
+                
+                // Трение и возврат к нормальной скорости
+                this.vx *= 0.99;
+                this.vy *= 0.99;
+                
                 const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
                 if (speed < this.minSpeed) {
                     this.vx *= 1.05;
                     this.vy *= 1.05;
                 }
+                
                 this.x += this.vx;
                 this.y += this.vy;
-                
+
                 if (this.x < 0) this.x = window.innerWidth;
                 if (this.x > window.innerWidth) this.x = 0;
                 if (this.y < 0) this.y = this.canvasHeight;
                 if (this.y > this.canvasHeight) this.y = 0;
             }
-
             draw() {
-                ctx.fillStyle = '#fff';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -367,8 +509,8 @@
         function init(fullHeight) {
             particles = [];
             const area = window.innerWidth * fullHeight;
-            const count = Math.floor(area / 15000); 
-            const limit = 450; 
+            const count = Math.floor(area / 9000); 
+            const limit = 750; 
             for (let i = 0; i < Math.min(count, limit); i++) {
                 particles.push(new Particle(fullHeight));
             }
@@ -383,25 +525,31 @@
             const scrollY = window.scrollY;
             const viewportHeight = window.innerHeight;
             const margin = 300; 
+            
+            const lineDistance = 140; // Увеличена дистанция связей
+            const lineDistanceSq = lineDistance * lineDistance;
 
             for (let i = 0; i < particles.length; i++) {
                 const p1 = particles[i];
                 p1.update();
                 
                 if (p1.y < scrollY - margin || p1.y > scrollY + viewportHeight + margin) continue;
+                
                 p1.draw();
-
+                
                 for (let j = i + 1; j < particles.length; j++) {
                     const p2 = particles[j];
-                    if (Math.abs(p1.y - p2.y) > 120) continue;
+                    if (Math.abs(p1.y - p2.y) > lineDistance) continue;
+                    
                     const dx = p1.x - p2.x;
                     const dy = p1.y - p2.y;
                     const distSq = dx * dx + dy * dy;
-
-                    if (distSq < 14400) {
+                    
+                    if (distSq < lineDistanceSq) {
                         const dist = Math.sqrt(distSq);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 * (1 - dist / 120)})`;
-                        ctx.lineWidth = 0.5;
+                        // Линии стали более выразительными (непрозрачность 0.35 вместо 0.2)
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.35 * (1 - dist / lineDistance)})`;
+                        ctx.lineWidth = 0.6;
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
@@ -429,13 +577,7 @@
 
         resize();
         animate();
-
-        AOS.init({ 
-            duration: 800, 
-            once: true,
-            offset: 50,
-            easing: 'ease-out-quart'
-        });
+        AOS.init({ duration: 800, once: true, offset: 50, easing: 'ease-out-quart' });
     </script>
 </body>
 </html>
